@@ -1,0 +1,5 @@
+# Object files
+*.o
+
+# Executable for this project
+chess
