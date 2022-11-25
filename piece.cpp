@@ -5,7 +5,7 @@ using namespace std;
 
 #include "piece.h"
 
-std::ostream& operator <<(std::ostream& out, Colour& _pieceColour){
+std::ostream& operator <<(std::ostream& out, Colour _pieceColour){
     switch (_pieceColour) {
     case white:
         out << "White"; break;
@@ -19,9 +19,7 @@ std::ostream& operator <<(std::ostream& out, Colour& _pieceColour){
 
 Piece::Piece(Colour _pieceColour, string _name): pieceColour(_pieceColour), name(_name){}
 
-string Piece::printType(){
-    cout<< pieceColour<<endl;
-    cout<< this->name<<endl;
+string Piece::printType() const{
     return name;
 }
 
@@ -31,16 +29,13 @@ bool Piece::isDestinationLegal(const char _destinationSquare[], Piece* board[8][
     // convert positions to integer indeces
     int fileDestination = _destinationSquare[0]-'A';
     int rankDestination = _destinationSquare[1]-'1';
-    cout<<"In the function isDestinationLegal"<<endl;
 
     //if the destination is not NULL, it cannot contain the same colour as the player
     if(board[rankDestination][fileDestination]!=NULL){
         if (board[rankDestination][fileDestination]->pieceColour == this->pieceColour){
-            cout<<"Destination is NOT legal"<<endl;
             return false;
         }
     }
-    cout<<"Destination is legal"<<endl;
     return true;
 }
 
@@ -53,11 +48,18 @@ void Piece::printColour() {
 }
 
 bool Piece::canMove(const char source_square[], const char destination_square[], Piece* board[8][8]){
+    int fileDestination = destination_square[0]-'A';
+    int rankDestination = destination_square[1]-'1';
+
     if(isDestinationLegal(destination_square, board) && isMoveValid(source_square, destination_square, board)){
-        cout<< pieceColour <<"'s "<< name << " moves to "<< destination_square <<"!"<<endl;
+        /*cout<< pieceColour <<"'s "<< name << " moves from "<<source_square<<" to "<< destination_square;
+        if(board[rankDestination][fileDestination]!=NULL){
+            cout<<" taking "<< board[rankDestination][fileDestination]->pieceColour <<"' "
+                << board[rankDestination][fileDestination]->name;
+        }*/
+        
         return true;
     }
-    cout<< pieceColour <<"'s "<< name << " cannot move to "<< destination_square <<"!"<<endl;
     return false;
 }
 
@@ -157,11 +159,14 @@ bool Bishop::isMoveValid(const char _sourceSquare[], const char _destinationSqua
     if((abs(rankDestination-rankSource))==(abs(fileDestination-fileSource))){
         // iterate through the diagonal in which the bishop is moving to check if it is leaping
         // over other pieces
-        for(int row = rankSource+fileDirec, column = fileSource+fileDirec; row != rankDestination ; 
+        //cout<<"Bishop moving diagonally"<<endl;
+        //cout<<"rankDir: "<<rankDirec<<" and fileDirec:"<<fileDirec<<endl;
+        for(int row = rankSource+rankDirec, column = fileSource+fileDirec; row != rankDestination ; 
             row=row+rankDirec, column=column+fileDirec){
             if (board[row][column]!=NULL){
                 return false;
             }
+            //cout<<"Bishop moving freely"<<endl;
         }
         return true;
     }
@@ -253,7 +258,12 @@ bool Pawn::isMoveValid(const char _sourceSquare[], const char _destinationSquare
     // if capturing another piece 
     if(board[rankDestination][fileDestination]!=NULL){
         // check if the move is one square diagonally in front of the source squre
-        if((rankDestination-rankSource==1) && (abs(fileDestination-fileSource)==1)){
+        // if pawn is white destination rank must be larger by one
+        // if black it must be smaller by one
+        if(((pieceColour==white) 
+            && (rankDestination-rankSource==1) && (abs(fileDestination-fileSource)==1))
+        || ((pieceColour==black) 
+            && (rankDestination-rankSource==-1) && (abs(fileDestination-fileSource)==1))){
             return true;
         }
         return false;
@@ -264,17 +274,17 @@ bool Pawn::isMoveValid(const char _sourceSquare[], const char _destinationSquare
         // if the first move(so the _sourceSquare has rank 1 or 6), it can move up to two places
         if (rankSource == 1 || rankSource ==6){
             // check if the pawn is leaping over a piece if moving two squares forward
-            if((fileDestination==fileSource) && (rankDestination-rankSource==2)){
+            if((fileDestination==fileSource) && (abs(rankDestination-rankSource)==2)){
                 for(int row = rankSource+1; row<=rankDestination; row++){
                     if(board[row][fileSource]!=NULL){
                         return false;
                     }
                 }
             
-            return true;       
+                return true;       
             }
             // if moving one square forward
-            else if((fileDestination==fileSource) && (rankDestination-rankSource==1)){
+            else if((fileDestination==fileSource) && (abs(rankDestination-rankSource)==1)){
                 
                 return true;
             }
