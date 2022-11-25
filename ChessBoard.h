@@ -7,13 +7,13 @@ class ChessBoard{
     private:
         Colour Player;
         
-        
         void changePlayer();
         bool inputsValid(const char _sourceSquare[], const char _destinationSquare[]);
         bool sourceNotEmpty(const char _sourceSquare[]);
         bool correctPlayer(const char _sourceSquare[]);
         void clearBoard();
         bool inCheck(Piece* king_ptr);
+        bool checkMate(Colour _player);
 
     public:
 

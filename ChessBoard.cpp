@@ -105,48 +105,9 @@ bool ChessBoard::correctPlayer(const char _sourceSquare[]){
     
     return false;
 }
-/*
-bool ChessBoard::inCheck(Piece* king_ptr){
-    cout<<"Checking if " << king_ptr->pieceColour<<" in check"<<endl;
-    // chessPieces[0][0]; // white king
-    // chessPieces[1][0]; // black king
-    
-    char kingPosition[3];
-    // find position of the king
-    for(int row=0; row<8; row++){
-        for (int column=0; column<8; column++){
-            if(board[row][column] == king_ptr){
-                kingPosition[0]= column + 'A';
-                kingPosition[1] = row + '1';
-                kingPosition[2] ='\0';
-            }
-        }
-    }
-
-    cout<<"Found "<<king_ptr->pieceColour<<" king's position at:"<<kingPosition<<endl;
-    
-    // king in check if its position is a valid move for any of the opposite Player's pieces
-    for (int row=0; row<8; row++){
-        for(int column=0; column<8; column++){
-            char sourceSquare[3]={column + 'A', row + '1', '\0'};
-            if(board[row][column]!=NULL){
-                if((board[row][column]->get_colour()!=king_ptr->get_colour())
-                && (board[row][column]->canMove(sourceSquare, kingPosition, board))){
-                cout<< king_ptr->pieceColour<<" is in check"<<endl;
-                cout<< "by row: "<< row <<" and column:"<<column<<endl;
-                cout<<" position: "<<sourceSquare<<endl;
-                cout<<" with "<<board[row][column]->pieceColour<<" "<<board[row][column]->name<<endl;
-                return true;
-                }
-            }
-        }
-    }
-    cout<<"King is not in check"<<endl;
-    return false;
-}*/
 
 bool ChessBoard::submitMove(const char source_square[], const char destination_square[]){
-    cout<<" TRYING to make a move from "<< source_square <<" to "<<destination_square<<endl;
+    //cout<<" TRYING to make a move from "<< source_square <<" to "<<destination_square<<endl;
     // convert positions to integer indeces
     int fileSource= source_square[0]-'A';
     int fileDestination = destination_square[0]-'A';
@@ -158,28 +119,13 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
             //cout<<"Not valid"<<endl;
             return false;
         }
+    
     Piece* destination_piece = board[rankDestination][fileDestination];
     Piece* source_piece = board[rankSource][fileSource];
 
-    if(board[rankSource][fileSource]->canMove(source_square, destination_square, board, chessPieces)){
-            /*// keep track of the destination piece that might be eaten
-            Piece* destination_piece = board[rankDestination][fileDestination];
-            
-            // move the piece to the destination square and remove it from source square
-            board[rankDestination][fileDestination]=board[rankSource][fileSource];
-            //cout<<"Assigned piece to new position"<<endl;
-            board[rankSource][fileSource]=NULL;
 
-            // is own king in check, if yes, reset the pointers to original squares
-            if (((Player == white) && (chessPieces[0][0]->inCheck(board))) || 
-                ((Player==black) && (chessPieces[1][0]->inCheck(board)))){
-                board[rankSource][fileSource]=board[rankDestination][fileDestination];
-                board[rankDestination][fileDestination]=destination_piece;
-                
-                return false;
-            }
+    if(board[rankSource][fileSource]->canMove(source_square, destination_square, board, chessPieces)){
             
-            */
         cout<< Player <<"'s "<< board[rankSource][fileSource]->name << " moves from "<<source_square<<" to "<< destination_square;
         if(destination_piece!=NULL){
             cout<<" taking "<< destination_piece->pieceColour <<"' "
@@ -192,22 +138,53 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         //cout<<"Assigned piece to new position"<<endl;
         board[rankSource][fileSource]=NULL;
 
-        printBoard(board);
+        // check for checkmate of other player 
+        if((Player == white)&&(checkMate(black))){
+                cout<<"Black is in checkmate"<<endl;
+                return true;}
+        else if((Player == black)&&(checkMate(white))){
+                cout<<"White is in checkmate"<<endl;
+                return true;}
 
         // check if the move put other Player's king in check
-            if(Player == white){
-                chessPieces[1][0]->inCheck(board, chessPieces);}
-            else if(Player == black){
-                chessPieces[0][0]->inCheck(board, chessPieces);}
+        if((Player == white)&&(chessPieces[1][0]->inCheck(board, chessPieces))){
+            cout<< chessPieces[1][0]->pieceColour<<" is in check"<<endl;}
+        else if((Player == black)&&(chessPieces[0][0]->inCheck(board, chessPieces))){
+            cout<< chessPieces[0][0]->pieceColour<<" is in check"<<endl;
+        }
 
-            // change player
-            changePlayer();
+        // change player
+        changePlayer();
 
-            return true;
+        return true;
         }
 
     cout<< Player <<"'s "<< board[rankSource][fileSource]->name << " cannot move to "<< destination_square <<"!"<<endl;
     return false;
+}
+
+
+bool ChessBoard::checkMate(Colour _player){
+    // checkmate happens when any of the pieces can legally move to any destination square
+    // which includes not putting your own king in check
+
+    for(int rank=0; rank<8; rank++){
+        for(int file=0; file<8; file++){
+            for(int row=0; row<8; row++){
+                for(int column=0; column<8; column++){
+                    char sourceSquare[3]={file + 'A', rank + '1', '\0'};
+                    char destinationSquare[3]={column + 'A', row + '1', '\0'};
+                    if((board[rank][file]!=NULL)
+                        && (board[rank][file]->pieceColour==_player)
+                        && (board[rank][file]->canMove(sourceSquare, destinationSquare, 
+                            board, chessPieces))){
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
 
 void ChessBoard::changePlayer(){

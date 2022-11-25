@@ -102,7 +102,7 @@ bool King::isMoveValid(const char _sourceSquare[], const char _destinationSquare
 
 bool King::inCheck(Piece* board[8][8], Piece* _chessPiece[2][6]){
 
-cout<<"Checking if " << pieceColour<<" in check"<<endl;
+//cout<<"Checking if " << pieceColour<<" in check"<<endl;
     // chessPieces[0][0]; // white king
     // chessPieces[1][0]; // black king
     
@@ -118,7 +118,7 @@ cout<<"Checking if " << pieceColour<<" in check"<<endl;
         }
     }
 
-    cout<<"Found "<<pieceColour<<" king's position at:"<<kingPosition<<endl;
+    //cout<<"Found "<<pieceColour<<" king's position at:"<<kingPosition<<endl;
     
     // king in check if its position is a valid move for any of the opposite Player's pieces
     for (int row=0; row<8; row++){
@@ -127,16 +127,16 @@ cout<<"Checking if " << pieceColour<<" in check"<<endl;
             if(board[row][column]!=NULL){
                 if((board[row][column]->get_colour()!=this->get_colour())
                 && (board[row][column]->canMove(sourceSquare, kingPosition, board, _chessPiece))){
-                cout<< this->pieceColour<<" is in check"<<endl;
-                cout<< "by row: "<< row <<" and column:"<<column<<endl;
-                cout<<" position: "<<sourceSquare<<endl;
+                //cout<< this->pieceColour<<" is in check"<<endl;
+                //cout<< "by row: "<< row <<" and column:"<<column<<endl;
+                //cout<<" position: "<<sourceSquare<<endl;
                 //cout<<" with "<<board[row][column]->pieceColour<<" "<<board[row][column]->name<<endl;
                 return true;
                 }
             }
         }
     }
-    cout<<"King is not in check"<<endl;
+    //cout<<"King is not in check"<<endl;
     return false;
 
 
