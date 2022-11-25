@@ -24,6 +24,8 @@ string Piece::printType() const{
 }
 
 Piece::~Piece(){}
+bool Piece::inCheck(Piece* board[8][8], Piece* _chessPiece[2][6]){return false;}
+bool Piece::checkMate(Piece* board[8][8]){return false;}
 
 bool Piece::isDestinationLegal(const char _destinationSquare[], Piece* board[8][8]){
     // convert positions to integer indeces
@@ -47,17 +49,34 @@ void Piece::printColour() {
     cout<< pieceColour;
 }
 
-bool Piece::canMove(const char source_square[], const char destination_square[], Piece* board[8][8]){
+bool Piece::canMove(const char source_square[], const char destination_square[], Piece* board[8][8], Piece* _chessPiece[2][6]){
+    int fileSource= source_square[0]-'A';
     int fileDestination = destination_square[0]-'A';
+    int rankSource = source_square[1]-'1';
     int rankDestination = destination_square[1]-'1';
 
     if(isDestinationLegal(destination_square, board) && isMoveValid(source_square, destination_square, board)){
-        /*cout<< pieceColour <<"'s "<< name << " moves from "<<source_square<<" to "<< destination_square;
-        if(board[rankDestination][fileDestination]!=NULL){
-            cout<<" taking "<< board[rankDestination][fileDestination]->pieceColour <<"' "
-                << board[rankDestination][fileDestination]->name;
-        }*/
-        
+        //check if the move would put your own king in check:
+        // keep track of the destination piece that might be eaten
+        Piece* destination_piece = board[rankDestination][fileDestination];
+        Piece* source_piece = board[rankSource][fileSource];
+
+        // move the piece to the destination square and remove it from source square
+        board[rankDestination][fileDestination]=board[rankSource][fileSource];
+        //cout<<"Assigned piece to new position"<<endl;
+        board[rankSource][fileSource]=NULL;
+
+        // is own king in check, if yes, reset the pointers to original squares
+        if (((pieceColour == white) && (_chessPiece[0][0]->inCheck(board, _chessPiece))) || 
+            ((pieceColour==black) && (_chessPiece[1][0]->inCheck(board, _chessPiece)))){
+            board[rankSource][fileSource]=board[rankDestination][fileDestination];
+            board[rankDestination][fileDestination]=destination_piece;
+                
+                return false;
+            }
+        board[rankSource][fileSource]=board[rankDestination][fileDestination];
+        board[rankDestination][fileDestination]=destination_piece;
+
         return true;
     }
     return false;
@@ -79,6 +98,52 @@ bool King::isMoveValid(const char _sourceSquare[], const char _destinationSquare
     // square of the source position
     return(abs(rankDifference)<=1 && abs(fileDifference)<=1);
     
+}
+
+bool King::inCheck(Piece* board[8][8], Piece* _chessPiece[2][6]){
+
+cout<<"Checking if " << pieceColour<<" in check"<<endl;
+    // chessPieces[0][0]; // white king
+    // chessPieces[1][0]; // black king
+    
+    char kingPosition[3];
+    // find position of the king
+    for(int row=0; row<8; row++){
+        for (int column=0; column<8; column++){
+            if(board[row][column] == this){
+                kingPosition[0]= column + 'A';
+                kingPosition[1] = row + '1';
+                kingPosition[2] ='\0';
+            }
+        }
+    }
+
+    cout<<"Found "<<pieceColour<<" king's position at:"<<kingPosition<<endl;
+    
+    // king in check if its position is a valid move for any of the opposite Player's pieces
+    for (int row=0; row<8; row++){
+        for(int column=0; column<8; column++){
+            char sourceSquare[3]={column + 'A', row + '1', '\0'};
+            if(board[row][column]!=NULL){
+                if((board[row][column]->get_colour()!=this->get_colour())
+                && (board[row][column]->canMove(sourceSquare, kingPosition, board, _chessPiece))){
+                cout<< this->pieceColour<<" is in check"<<endl;
+                cout<< "by row: "<< row <<" and column:"<<column<<endl;
+                cout<<" position: "<<sourceSquare<<endl;
+                //cout<<" with "<<board[row][column]->pieceColour<<" "<<board[row][column]->name<<endl;
+                return true;
+                }
+            }
+        }
+    }
+    cout<<"King is not in check"<<endl;
+    return false;
+
+
+}
+
+bool King::checkMate(Piece* board[8][8]){
+    // check if any pieces of the same colour as the king can make a valid move 
 }
 
 

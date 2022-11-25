@@ -21,6 +21,15 @@ ChessBoard::ChessBoard(): Player(white){
 
     resetBoard();
 }
+
+Piece* ChessBoard::get_white_king() const{
+    return chessPieces[0][0];
+}
+
+Piece* ChessBoard::get_black_king() const{
+    return chessPieces[1][0];
+}
+
 void ChessBoard::resetBoard(){
     
     // reset next player to white
@@ -96,7 +105,7 @@ bool ChessBoard::correctPlayer(const char _sourceSquare[]){
     
     return false;
 }
-
+/*
 bool ChessBoard::inCheck(Piece* king_ptr){
     cout<<"Checking if " << king_ptr->pieceColour<<" in check"<<endl;
     // chessPieces[0][0]; // white king
@@ -134,7 +143,7 @@ bool ChessBoard::inCheck(Piece* king_ptr){
     }
     cout<<"King is not in check"<<endl;
     return false;
-}
+}*/
 
 bool ChessBoard::submitMove(const char source_square[], const char destination_square[]){
     cout<<" TRYING to make a move from "<< source_square <<" to "<<destination_square<<endl;
@@ -149,9 +158,11 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
             //cout<<"Not valid"<<endl;
             return false;
         }
-        
-    if(board[rankSource][fileSource]->canMove(source_square, destination_square, board)){
-            // keep track of the destination piece that might be eaten
+    Piece* destination_piece = board[rankDestination][fileDestination];
+    Piece* source_piece = board[rankSource][fileSource];
+
+    if(board[rankSource][fileSource]->canMove(source_square, destination_square, board, chessPieces)){
+            /*// keep track of the destination piece that might be eaten
             Piece* destination_piece = board[rankDestination][fileDestination];
             
             // move the piece to the destination square and remove it from source square
@@ -160,27 +171,34 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
             board[rankSource][fileSource]=NULL;
 
             // is own king in check, if yes, reset the pointers to original squares
-            if (((Player == white) && (inCheck(chessPieces[0][0]))) || 
-                ((Player==black) && (inCheck(chessPieces[1][0])))){
+            if (((Player == white) && (chessPieces[0][0]->inCheck(board))) || 
+                ((Player==black) && (chessPieces[1][0]->inCheck(board)))){
                 board[rankSource][fileSource]=board[rankDestination][fileDestination];
                 board[rankDestination][fileDestination]=destination_piece;
                 
                 return false;
             }
             
-            
-        cout<< Player <<"'s "<< board[rankDestination][fileDestination]->name << " moves from "<<source_square<<" to "<< destination_square;
+            */
+        cout<< Player <<"'s "<< board[rankSource][fileSource]->name << " moves from "<<source_square<<" to "<< destination_square;
         if(destination_piece!=NULL){
             cout<<" taking "<< destination_piece->pieceColour <<"' "
                 << destination_piece->name;
         }
         cout<<endl;
 
+        // move the piece to the destination square and remove it from source square
+        board[rankDestination][fileDestination]=source_piece;
+        //cout<<"Assigned piece to new position"<<endl;
+        board[rankSource][fileSource]=NULL;
+
+        printBoard(board);
+
         // check if the move put other Player's king in check
-            if (((Player == white) && (inCheck(chessPieces[1][0]))) ||
-                ((Player == black) && (inCheck(chessPieces[0][0])))){
-                cout<< Player<< " is in check";
-            }
+            if(Player == white){
+                chessPieces[1][0]->inCheck(board, chessPieces);}
+            else if(Player == black){
+                chessPieces[0][0]->inCheck(board, chessPieces);}
 
             // change player
             changePlayer();

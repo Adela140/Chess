@@ -22,6 +22,8 @@ class ChessBoard{
         ChessBoard();
         ~ChessBoard();
         void resetBoard();
+        Piece* get_white_king() const;
+        Piece* get_black_king() const;
         void getElement(const char _square[]);
         bool submitMove(const char source_square[], const char destination_square[]);
         void printBoard(Piece* board[8][8]);

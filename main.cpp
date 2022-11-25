@@ -61,42 +61,43 @@ int main(){
 	cout << '\n';
 
 	cb.submitMove("E2", "E4");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("E7", "E6");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("D2", "D4");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("D7", "D5");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("B1", "C3");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("F8", "B4");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("F1", "D3");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("B4", "C3");
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("B2", "C3");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("H7", "H6");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("C1", "A3");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("B8", "D7");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("D1", "E2");
-   //cb.printBoard(cb.board);
+   cb.printBoard(cb.board);
 	cb.submitMove("D5", "E4");
    cb.printBoard(cb.board);
 	cout << '\n';
@@ -108,15 +109,20 @@ int main(){
 	cout << '\n';
 
 	cb.submitMove("E4", "D3");
+   cb.printBoard(cb.board);
    
 	cb.submitMove("B7", "B6");
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("E2", "E6");
+   cb.printBoard(cb.board);
 	cb.submitMove("F7", "E6");
+   cb.printBoard(cb.board);
 	cout << '\n';
 
 	cb.submitMove("D3", "G6");
+   cb.printBoard(cb.board);
 	cout << '\n';
 
    
