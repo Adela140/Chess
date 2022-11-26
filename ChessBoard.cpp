@@ -117,7 +117,7 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         cout<< player <<"'s "<< board[rankDestination][fileDestination]->name 
             << " moves from "<<source_square<<" to "<< destination_square;
         if(destination_piece!=NULL){
-            cout<<" taking "<< destination_piece->pieceColour <<"' "
+            cout<<" taking "<< destination_piece->pieceColour <<"'s "
                 << destination_piece->name;
         }
         cout<<endl;

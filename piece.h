@@ -46,6 +46,7 @@ class Piece {
         virtual bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
 
     friend class ChessBoard; 
+    
     public:
         /* Contructs a Piece object 
          * Parameters: colour of the piece (White or Black) and name of the chess piece */
