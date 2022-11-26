@@ -13,6 +13,26 @@ using std::cout;
 
 int main() {
 
+/**************************** Testing the chess piece classes ***************************/
+
+	ChessBoard chess;
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************************************** FINAL TEST **************************************/
+
 	cout << "========================\n";
 	cout << "Testing the Chess Engine\n";
 	cout << "========================\n\n";
