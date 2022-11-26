@@ -8,36 +8,30 @@ using namespace std;
 
 Pawn::Pawn(Colour _pieceColour) : Piece(_pieceColour, "Pawn"){}
 Pawn::~Pawn(){}
-bool Pawn::isMoveValid(const char _sourceSquare[], const char _destinationSquare[], Piece* board[8][8]){
-    
-    // convert positions to integer indeces
-    int fileSource= _sourceSquare[0]-'A';
-    int fileDestination = _destinationSquare[0]-'A';
-    int rankSource = _sourceSquare[1]-'1';
-    int rankDestination = _destinationSquare[1]-'1';
+bool Pawn::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]){
 
     // if capturing another piece 
-    if(board[rankDestination][fileDestination]!=NULL){
+    if(board[rankEnd][fileEnd]!=NULL){
         // check if the move is one square diagonally in front of the source squre
         // if pawn is white destination rank must be larger by one
         // if black it must be smaller by one
         if(((pieceColour==white) 
-            && (rankDestination-rankSource==1) && (abs(fileDestination-fileSource)==1))
+            && (rankEnd-rankStart==1) && (abs(fileEnd-fileStart)==1))
         || ((pieceColour==black) 
-            && (rankDestination-rankSource==-1) && (abs(fileDestination-fileSource)==1))){
+            && (rankEnd-rankStart==-1) && (abs(fileEnd-fileStart)==1))){
             return true;
         }
         return false;
     }
     // if moving to unoccupied square
-    else if(board[rankDestination][fileDestination]==NULL){
+    else if(board[rankEnd][fileEnd]==NULL){
         
         // if the first move(so the _sourceSquare has rank 1 or 6), it can move up to two places
-        if (rankSource == 1 || rankSource ==6){
+        if (rankStart == 1 || rankStart ==6){
             // check if the pawn is leaping over a piece if moving two squares forward
-            if((fileDestination==fileSource) && (abs(rankDestination-rankSource)==2)){
-                for(int row = rankSource+1; row<=rankDestination; row++){
-                    if(board[row][fileSource]!=NULL){
+            if((fileEnd==fileStart) && (abs(rankEnd-rankStart)==2)){
+                for(int row = rankStart+1; row<=rankEnd; row++){
+                    if(board[row][fileStart]!=NULL){
                         return false;
                     }
                 }
@@ -45,14 +39,14 @@ bool Pawn::isMoveValid(const char _sourceSquare[], const char _destinationSquare
                 return true;       
             }
             // if moving one square forward
-            else if((fileDestination==fileSource) && (abs(rankDestination-rankSource)==1)){
+            else if((fileEnd==fileStart) && (abs(rankEnd-rankStart)==1)){
                 
                 return true;
             }
             return false;
         }
         // if not the pawn's first move, it can move one square forward
-        if((fileDestination==fileSource) && (rankDestination-rankSource==1)){
+        if((fileEnd==fileStart) && (rankEnd-rankStart==1)){
             
             return true;
         }

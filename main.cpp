@@ -41,7 +41,7 @@ int main(){
 	ChessBoard cb;
 	cout << '\n';
 
-   cb.printBoard(cb.board);
+   cb.printBoard();
 
    cout<<"Test:"<<endl;
 	cb.submitMove("D7", "D6");

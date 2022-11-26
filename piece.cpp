@@ -24,17 +24,14 @@ string Piece::printType() const{
 }
 
 Piece::~Piece(){}
-bool Piece::inCheck(Piece* board[8][8], Piece* _chessPiece[2][6]){return false;}
-bool Piece::checkMate(Piece* board[8][8]){return false;}
+bool Piece::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){return false;}
+bool Piece::checkMate(Piece* const board[8][8]){return false;}
 
-bool Piece::isDestinationLegal(const char _destinationSquare[], Piece* board[8][8]){
-    // convert positions to integer indeces
-    int fileDestination = _destinationSquare[0]-'A';
-    int rankDestination = _destinationSquare[1]-'1';
+bool Piece::isDestinationLegal(int rankEnd, int fileEnd, Piece* const board[8][8]){
 
     //if the destination is not NULL, it cannot contain the same colour as the player
-    if(board[rankDestination][fileDestination]!=NULL){
-        if (board[rankDestination][fileDestination]->pieceColour == this->pieceColour){
+    if(board[rankEnd][fileEnd]!=NULL){
+        if (board[rankEnd][fileEnd]->pieceColour == this->pieceColour){
             return false;
         }
     }
@@ -49,33 +46,29 @@ void Piece::printColour() {
     cout<< pieceColour;
 }
 
-bool Piece::canMove(const char source_square[], const char destination_square[], Piece* board[8][8], Piece* _chessPiece[2][6]){
-    int fileSource= source_square[0]-'A';
-    int fileDestination = destination_square[0]-'A';
-    int rankSource = source_square[1]-'1';
-    int rankDestination = destination_square[1]-'1';
+bool Piece::canMove(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* board[8][8], Piece* const _chessPiece[2][6]){
 
-    if(isDestinationLegal(destination_square, board) && isMoveValid(source_square, destination_square, board)){
+    if(isDestinationLegal(rankEnd, fileEnd, board)
+        && isMoveValid(rankStart, fileStart, rankEnd, fileEnd, board)){
         //check if the move would put your own king in check:
         // keep track of the destination piece that might be eaten
-        Piece* destination_piece = board[rankDestination][fileDestination];
-        Piece* source_piece = board[rankSource][fileSource];
+        Piece* destination_piece = board[rankEnd][fileEnd];
 
         // move the piece to the destination square and remove it from source square
-        board[rankDestination][fileDestination]=board[rankSource][fileSource];
+        board[rankEnd][fileEnd]=board[rankStart][fileStart];
         //cout<<"Assigned piece to new position"<<endl;
-        board[rankSource][fileSource]=NULL;
+        board[rankStart][fileStart]=NULL;
 
         // is own king in check, if yes, reset the pointers to original squares
         if (((pieceColour == white) && (_chessPiece[0][0]->inCheck(board, _chessPiece))) || 
             ((pieceColour==black) && (_chessPiece[1][0]->inCheck(board, _chessPiece)))){
-            board[rankSource][fileSource]=board[rankDestination][fileDestination];
-            board[rankDestination][fileDestination]=destination_piece;
+            board[rankStart][fileStart]=board[rankEnd][fileEnd];
+            board[rankEnd][fileEnd]=destination_piece;
                 
                 return false;
             }
-        board[rankSource][fileSource]=board[rankDestination][fileDestination];
-        board[rankDestination][fileDestination]=destination_piece;
+        board[rankStart][fileStart]=board[rankEnd][fileEnd];
+        board[rankEnd][fileEnd]=destination_piece;
 
         return true;
     }

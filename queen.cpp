@@ -8,41 +8,36 @@ using namespace std;
 
 Queen::Queen(Colour _pieceColour) : Piece(_pieceColour, "Queen"){}
 Queen::~Queen(){}
-bool Queen::isMoveValid(const char _sourceSquare[], const char _destinationSquare[], Piece* board[8][8]){
-    // convert positions to integer indeces
-    int fileSource= _sourceSquare[0]-'A';
-    int fileDestination = _destinationSquare[0]-'A';
-    int rankSource = _sourceSquare[1]-'1';
-    int rankDestination = _destinationSquare[1]-'1';
+bool Queen::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]){
 
     // determine in which direction the queen is moving
     int rankDirec;
     int fileDirec;
-    if(rankDestination>rankSource){
+    if(rankEnd>rankStart){
         rankDirec=1;
     }
-    else if(rankDestination==rankSource){
+    else if(rankEnd==rankStart){
         rankDirec=0;
     }
     else
         rankDirec=-1;
 
-    if(fileDestination>fileSource){
+    if(fileEnd>fileStart){
         fileDirec=1;
     }
-    else if(fileDestination==fileSource){
+    else if(fileEnd==fileStart){
         fileDirec=0;
     }
     else
         fileDirec=-1;
 
     // check that the queen is either moving diagonally or along a file or rank
-    if((rankDestination==rankSource)||(fileDestination==fileSource)||
-        ((abs(rankDestination-rankSource))==(abs(fileDestination-fileSource)))){
+    if((rankEnd==rankStart)||(fileEnd==fileStart)||
+        ((abs(rankEnd-rankStart))==(abs(fileEnd-fileStart)))){
         
         // check if the queen is leaping over some pieces
-        for(int row=rankSource+rankDirec, column=fileSource+fileDirec; row!=rankDestination
-            || column!=fileDestination; row=row+rankDirec, column=column+fileDirec){
+        for(int row=rankStart+rankDirec, column=fileStart+fileDirec; row!=rankEnd
+            || column!=fileEnd; row=row+rankDirec, column=column+fileDirec){
                 if(board[row][column]!=NULL){
                     return false;
                 }

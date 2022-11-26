@@ -8,20 +8,16 @@ using namespace std;
 
 Knight::Knight(Colour _pieceColour) : Piece(_pieceColour, "Knight"){}
 Knight::~Knight(){}
-bool Knight::isMoveValid(const char _sourceSquare[], const char _destinationSquare[], Piece* board[8][8]){
-    // convert positions to integer indeces
-    int fileSource= _sourceSquare[0]-'A';
-    int fileDestination = _destinationSquare[0]-'A';
-    int rankSource = _sourceSquare[1]-'1';
-    int rankDestination = _destinationSquare[1]-'1';
+bool Knight::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]){
+
 
     // knight can move two squares vertically and one horizontally 
-    if((abs(rankDestination-rankSource))==1 && (abs(fileDestination-fileSource))==2){
+    if((abs(rankEnd-rankStart))==1 && (abs(fileEnd-fileStart))==2){
         return true;
     }
     
     // OR knight can move two squares horizontally and one vertically
-    if((abs(rankDestination-rankSource))==2 && (abs(fileDestination-fileSource))==1){
+    if((abs(rankEnd-rankStart))==2 && (abs(fileEnd-fileStart))==1){
         return true;
     }
 
