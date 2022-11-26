@@ -3,11 +3,17 @@
 
 #include "piece.h"
 
+/************************** Declarations for ChessBoard class ***************************/
+
+/* ChessBoard provides an interface through which players can interact with 
+   chess pieces in an 8x8 board */
+
 class ChessBoard{
     private:
-        Colour Player;
+        Colour player;
         Piece* chessPieces[2][6];
         Piece* board[8][8];
+        bool gameOver;
         
         void changePlayer();
         bool inputsValid(const char _sourceSquare[], const char _destinationSquare[]);
@@ -15,11 +21,13 @@ class ChessBoard{
         bool correctPlayer(int start_row, int start_column);
         void clearBoard();
         bool inCheck(Piece* king_ptr);
-        bool checkMate(Colour _player);
+        bool checkmate(Colour _player);
+        bool canMove(Colour _player);
+        bool endOfGame(Colour _player);
 
     public:
         /* Constructs the ChessBoard to contain an 8x8 board with pieces set up
-         * Sets the first player to be white by default*/
+         * Sets the first player to be white and gameOver to be false by default*/
         ChessBoard();
 
         /* Destructs the ChessBoard and all the pieces created on the heap*/

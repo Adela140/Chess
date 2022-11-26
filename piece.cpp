@@ -16,12 +16,12 @@ std::ostream& operator <<(std::ostream& out, Colour _pieceColour){
     }
     return out;
 }
+Colour operator++(Colour& _colour){
+    _colour = static_cast<Colour>((static_cast<int>(_colour) + 1) % 2);
+    return _colour;
+}
 
 Piece::Piece(Colour _pieceColour, string _name): pieceColour(_pieceColour), name(_name){}
-
-string Piece::printType() const{
-    return name;
-}
 
 Piece::~Piece(){}
 bool Piece::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){return false;}
@@ -40,10 +40,6 @@ bool Piece::isDestinationLegal(int rankEnd, int fileEnd, Piece* const board[8][8
 
 const Colour Piece::get_colour() const {
     return pieceColour;
-}
-
-void Piece::printColour() {
-    cout<< pieceColour;
 }
 
 bool Piece::canMove(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* board[8][8], Piece* const _chessPiece[2][6]){

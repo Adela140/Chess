@@ -13,26 +13,6 @@ using namespace std;
 
 int main(){
     
-   /* int row1[2]={1,2};
-    int row2[2]={3,4};
-    int board[2][2]={{*row1}, {*row2}};
-    cout<< board[1][0]<<endl;
-    */
-
-   ChessBoard board1;
-   Pawn pawn1(white);
-   pawn1.printType();
-
-   if(board1.submitMove("A10", "A2")){
-      cout<<"Move is valid"<<endl;
-   }
-   else{
-      cout<<"Move is not valid"<<endl;
-   }
-
-   // piece on position B2
-   //board1.getElement("D8");
-
 
    cout << "========================\n";
 	cout << "Testing the Chess Engine\n";

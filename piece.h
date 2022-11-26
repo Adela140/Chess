@@ -5,7 +5,11 @@
 using namespace std;
 
 enum Colour{white, black};
-std::ostream& operator << (std::ostream& out, Colour _lightColour);
+std::ostream& operator << (std::ostream& out, Colour _colour);
+
+/* Overriding the ++ operator for Colour
+* Changes colour from white to black and from black to white */
+Colour operator++(Colour& _colour);
 
 
 class Piece {
@@ -26,8 +30,6 @@ class Piece {
         bool canMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                     Piece* board[8][8], Piece* const _chessPiece[2][6]);
         const Colour get_colour() const;
-        void printColour();
-        string printType() const;
 };
 
 #endif

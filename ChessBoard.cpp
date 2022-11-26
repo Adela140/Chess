@@ -10,7 +10,7 @@ using namespace std;
 #include "bishop.h"
 #include "pawn.h"
 
-ChessBoard::ChessBoard(): Player(white){
+ChessBoard::ChessBoard(): player(white), gameOver(false){
 
     // create new pointers to all the board pieces and store them in chessPieces matrix
     chessPieces[0][0] = new King(white);
@@ -33,7 +33,7 @@ ChessBoard::ChessBoard(): Player(white){
 void ChessBoard::resetBoard(){
     
     // reset next player to white
-    Player =white;
+    player =white;
 
     // initially set all the squares to NULL
     clearBoard();
@@ -95,7 +95,7 @@ bool ChessBoard::sourceNotEmpty(int start_row, int start_column){
 
 bool ChessBoard::correctPlayer(int start_row, int start_column){
 
-    return(board[start_row][start_column]->get_colour()==Player);
+    return(board[start_row][start_column]->pieceColour==player);
 }
 
 bool ChessBoard::submitMove(const char source_square[], const char destination_square[]){
@@ -106,6 +106,9 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
     int rankSource = source_square[1]-'1';
     int rankDestination = destination_square[1]-'1';
 
+    if(gameOver){
+        return false;
+    }
     if(!(inputsValid(source_square, destination_square))){
         return false;
     }
@@ -114,7 +117,7 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         return false;
     }
     if(!(correctPlayer(rankSource, fileSource))){
-        cout<<"It is not "<<board[rankSource][fileSource]->get_colour()<<"'s turn to move!"<<endl;
+        cout<<"It is not "<<board[rankSource][fileSource]->pieceColour<<"'s turn to move!"<<endl;
         return false;
     }
     
@@ -129,25 +132,23 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         //cout<<"Assigned piece to new position"<<endl;
         board[rankSource][fileSource]=NULL;
 
-        cout<< Player <<"'s "<< board[rankDestination][fileDestination]->name << " moves from "<<source_square<<" to "<< destination_square;
+        cout<< player <<"'s "<< board[rankDestination][fileDestination]->name << " moves from "<<source_square<<" to "<< destination_square;
         if(destination_piece!=NULL){
             cout<<" taking "<< destination_piece->pieceColour <<"' "
                 << destination_piece->name;
         }
         cout<<endl;
 
-        // check for checkmate of other player 
-        if((Player == white)&&(checkMate(black))){
-                cout<<"Black is in checkmate"<<endl;
-                return true;}
-        else if((Player == black)&&(checkMate(white))){
-                cout<<"White is in checkmate"<<endl;
-                return true;}
+        // check for end of game 
+        if(endOfGame(player)){
+            gameOver=true;
+            return true;
+        }
 
-        // check if the move put other Player's king in check
-        if((Player == white)&&(chessPieces[1][0]->inCheck(board, chessPieces))){
+        // if not end of game, check if the move put other Player's king in check
+        if((player == white)&&(chessPieces[1][0]->inCheck(board, chessPieces))){
             cout<< chessPieces[1][0]->pieceColour<<" is in check"<<endl;}
-        else if((Player == black)&&(chessPieces[0][0]->inCheck(board, chessPieces))){
+        else if((player == black)&&(chessPieces[0][0]->inCheck(board, chessPieces))){
             cout<< chessPieces[0][0]->pieceColour<<" is in check"<<endl;
         }
 
@@ -157,13 +158,27 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         return true;
         }
 
-    cout<< Player <<"'s "<< board[rankSource][fileSource]->name << " cannot move to "<< destination_square <<"!"<<endl;
+    cout<< player <<"'s "<< board[rankSource][fileSource]->name << " cannot move to "<< destination_square <<"!"<<endl;
     return false;
 }
 
-
-bool ChessBoard::checkMate(Colour _player){
-    // checkmate happens when any of the pieces can legally move to any destination square
+bool ChessBoard::endOfGame(Colour _player){
+    // end of game if other player cannot move without putting king in check
+    Colour otherPlayer = ++_player;
+    if(!(canMove(otherPlayer))){
+        // if cannot legally move and is in check, player is in checkmate
+        if(checkmate(otherPlayer)){
+            cout<< otherPlayer<< " is in checkmate"<<endl;
+            return true;
+        }
+        // otherwise player is in stalemate
+        cout<< otherPlayer<<" is in stalemate"<<endl;
+        return true;
+    }      
+    return false;
+}
+bool ChessBoard::checkmate(Colour _player){
+    // checkmate happens when none of the pieces can legally move to any destination square
     // which includes not putting your own king in check
 
     for(int rank=0; rank<8; rank++){
@@ -183,11 +198,31 @@ bool ChessBoard::checkMate(Colour _player){
     return true;
 }
 
+bool ChessBoard::canMove(Colour _player){
+
+    // stalemate occurs when the player cannot legally play any moves
+    for(int rank=0; rank<8; rank++){
+        for(int file=0; file<8; file++){
+            for(int row=0; row<8; row++){
+                for(int column=0; column<8; column++){
+                    if((board[rank][file]!=NULL)
+                        && (board[rank][file]->pieceColour==_player)
+                        && (board[rank][file]->canMove(rank, file, row, column, 
+                            board, chessPieces))){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void ChessBoard::changePlayer(){
-    switch(Player){
-        case white: Player = black; break;
-        case black: Player = white; break;
-        default: Player = white; break;
+    switch(player){
+        case white: player = black; break;
+        case black: player = white; break;
+        default: player = white; break;
     }
     return;
 }
@@ -195,7 +230,7 @@ void ChessBoard::changePlayer(){
 void ChessBoard::getElement(const char _square[2]){
     int x = _square[1] - '1';
     int y = _square[0] - 'A';
-    cout<<board[x][y]->printType();
+    cout<<board[x][y]->name;
 }
 ChessBoard::~ChessBoard(){
     for(int row=0; row<2; row++){
