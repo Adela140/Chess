@@ -3,11 +3,23 @@
 
 #include "piece.h"
 
+/**************************** Declarations for Queen class ******************************/
+/* Queen inherits from Piece class */
+
 class Queen: public Piece {
     private:
-        bool isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]);
+        /* Returns true if moving along a rank, file or diagonally 
+           but not leaping over other pieces 
+         * Parameters: integer indeces of rank and files of the source and destination, 
+           and the 8x8 board containing current state of the game */
+        bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
+                            Piece* const board[8][8]);
     public:
+        /* Contructs a Queen object with default name (inherited from Piece) "Queen"
+         * Parameters: colour of the piece (White or Black) */
         Queen(Colour _pieceColour);
+
+        /* Destructs the Queen object */
         ~Queen();
 };
 

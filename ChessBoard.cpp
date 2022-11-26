@@ -10,6 +10,9 @@ using namespace std;
 #include "bishop.h"
 #include "pawn.h"
 
+/************************** Definitions for ChessBoard class ****************************/
+
+/* Constructs a ChessBoard with chess pieces set up on 8x8 board*/
 ChessBoard::ChessBoard(): player(white), gameOver(false){
 
     // create new pointers to all the board pieces and store them in chessPieces matrix
@@ -30,6 +33,7 @@ ChessBoard::ChessBoard(): player(white), gameOver(false){
     resetBoard();
 }
 
+/* Resets the 8x8 board in ChessBoard to contain original set up */ 
 void ChessBoard::resetBoard(){
     
     // reset next player to white
@@ -62,6 +66,7 @@ void ChessBoard::resetBoard(){
 
 }
 
+/* Sets all the squares in the 8x8 board to null */
 void ChessBoard::clearBoard(){
     for (int row =0; row<8; row++){
         for (int column=0; column<8; column++){
@@ -69,43 +74,18 @@ void ChessBoard::clearBoard(){
         }
     }
 }
-bool ChessBoard::inputsValid(const char _sourceSquare[], const char _destinationSquare[]){
-    
-    // check that inputs are only two characters
-    if((strlen(_sourceSquare)!=2) || (strlen(_destinationSquare)!=2)){
-            return false;
-    }
 
-    // check that the source square and destination square are not the same
-    if(!(strcmp(_sourceSquare, _destinationSquare))){
-        return false;
-    }
-        
-    // return true if the rank for both the source and destination lies between '1' and '8'
-    // and the file for both lies between 'A' and 'H'
-    return(_sourceSquare[0]>='A' && _sourceSquare[0]<='H' && _sourceSquare[1]>='1' && _sourceSquare[1]<='8'
-    && _destinationSquare[0]>='A' && _destinationSquare[0]<='H' && _destinationSquare[1]>='1' && _destinationSquare[1]<='8');
-
-}
-
-bool ChessBoard::sourceNotEmpty(int start_row, int start_column){
-
-    return(!(board[start_row][start_column]==NULL));
-}
-
-bool ChessBoard::correctPlayer(int start_row, int start_column){
-
-    return(board[start_row][start_column]->pieceColour==player);
-}
-
+/* Changes the pieces if the submitted move is valid*/
 bool ChessBoard::submitMove(const char source_square[], const char destination_square[]){
-    //cout<<" TRYING to make a move from "<< source_square <<" to "<<destination_square<<endl;
-    // convert positions to integer indeces
+    
+    // convert source_square and destination_square to integer indeces for rank and file
     int fileSource= source_square[0]-'A';
     int fileDestination = destination_square[0]-'A';
     int rankSource = source_square[1]-'1';
     int rankDestination = destination_square[1]-'1';
 
+    // do not attempt the move if the game is already over, the inputs are invalid, 
+    // the source is not empty or if the incorrect player is making the move:
     if(gameOver){
         return false;
     }
@@ -121,54 +101,96 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         return false;
     }
     
+    // keep track of the contents of the source and destination squares
     Piece* destination_piece = board[rankDestination][fileDestination];
     Piece* source_piece = board[rankSource][fileSource];
 
-
-    if(board[rankSource][fileSource]->canMove(rankSource, fileSource, rankDestination, fileDestination, board, chessPieces)){
-        
-        // move the piece to the destination square and remove it from source square
+    // check if the piece in source square can make the move legally
+    if(board[rankSource][fileSource]->isMoveValid(rankSource, fileSource, rankDestination,
+                                                 fileDestination, board, chessPieces)){
+        // if the move is valid, move the piece to the destination square 
+        // and remove it from source square
         board[rankDestination][fileDestination]=source_piece;
-        //cout<<"Assigned piece to new position"<<endl;
         board[rankSource][fileSource]=NULL;
 
-        cout<< player <<"'s "<< board[rankDestination][fileDestination]->name << " moves from "<<source_square<<" to "<< destination_square;
+        cout<< player <<"'s "<< board[rankDestination][fileDestination]->name 
+            << " moves from "<<source_square<<" to "<< destination_square;
         if(destination_piece!=NULL){
             cout<<" taking "<< destination_piece->pieceColour <<"' "
                 << destination_piece->name;
         }
         cout<<endl;
 
-        // check for end of game 
-        if(endOfGame(player)){
+        // check if the move ended the game (the other player is in checkmate or stalemate)
+        if(endOfGame()){
             gameOver=true;
             return true;
         }
 
-        // if not end of game, check if the move put other Player's king in check
-        if((player == white)&&(chessPieces[1][0]->inCheck(board, chessPieces))){
-            cout<< chessPieces[1][0]->pieceColour<<" is in check"<<endl;}
-        else if((player == black)&&(chessPieces[0][0]->inCheck(board, chessPieces))){
-            cout<< chessPieces[0][0]->pieceColour<<" is in check"<<endl;
+        // if not the end of game, check if the move put other Player's king in check
+        // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
+        // and white=0 and black=1
+        Colour otherPlayer =  static_cast<Colour>(!player);
+        if((chessPieces[otherPlayer][0]->inCheck(board, chessPieces))){
+            cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in check"<<endl;
         }
 
         // change player
         changePlayer();
 
         return true;
-        }
+    }
 
-    cout<< player <<"'s "<< board[rankSource][fileSource]->name << " cannot move to "<< destination_square <<"!"<<endl;
+    cout<< player <<"'s "<< board[rankSource][fileSource]->name 
+        << " cannot move to "<< destination_square <<"!"<<endl;
+
     return false;
 }
 
-bool ChessBoard::endOfGame(Colour _player){
-    // end of game if other player cannot move without putting king in check
-    Colour otherPlayer = ++_player;
+/* Checks if coordinates of inputs are valid */
+bool ChessBoard::inputsValid(const char _sourceSquare[], const char _destinationSquare[]){
+    
+    // check that inputs are only two characters
+    if((strlen(_sourceSquare)!=2) || (strlen(_destinationSquare)!=2)){
+        return false;
+    }
+
+    // check that the source square and destination square are not the same
+    if(!(strcmp(_sourceSquare, _destinationSquare))){
+        return false;
+    }
+        
+    // return true if the rank for both the source and destination lies between '1' and '8'
+    // and the file for both lies between 'A' and 'H'
+    return(_sourceSquare[0]>='A' && _sourceSquare[0]<='H' && _sourceSquare[1]>='1' 
+        && _sourceSquare[1]<='8'&& _destinationSquare[0]>='A' && _destinationSquare[0]<='H' 
+        && _destinationSquare[1]>='1' && _destinationSquare[1]<='8');
+
+}
+
+/* Returns true if the source is not empty */
+bool ChessBoard::sourceNotEmpty(int start_row, int start_column){
+
+    return(!(board[start_row][start_column]==NULL));
+}
+
+/* Returns true if the correct player is making the move */
+bool ChessBoard::correctPlayer(int start_row, int start_column){
+
+    return(board[start_row][start_column]->pieceColour==player);
+}
+
+/* Returns true if the current player made the other player be in checkmate or stalemate */
+bool ChessBoard::endOfGame(){
+    
+    Colour otherPlayer =  static_cast<Colour>(!player); // this would be the future player
+    // end of game if other player cannot move without putting king in check:
+    // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
+    // and white=0 and black=1
     if(!(canMove(otherPlayer))){
-        // if cannot legally move and is in check, player is in checkmate
-        if(checkmate(otherPlayer)){
-            cout<< otherPlayer<< " is in checkmate"<<endl;
+        // if the player cannot legally move AND is in check, player is in checkmate
+        if((chessPieces[otherPlayer][0]->inCheck(board, chessPieces))){
+            cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in checkmate"<<endl;
             return true;
         }
         // otherwise player is in stalemate
@@ -177,37 +199,23 @@ bool ChessBoard::endOfGame(Colour _player){
     }      
     return false;
 }
-bool ChessBoard::checkmate(Colour _player){
-    // checkmate happens when none of the pieces can legally move to any destination square
-    // which includes not putting your own king in check
 
-    for(int rank=0; rank<8; rank++){
-        for(int file=0; file<8; file++){
-            for(int row=0; row<8; row++){
-                for(int column=0; column<8; column++){
-                    if((board[rank][file]!=NULL)
-                        && (board[rank][file]->pieceColour==_player)
-                        && (board[rank][file]->canMove(rank, file, row, column, 
-                            board, chessPieces))){
-                        return false;
-                    }
-                }
-            }
-        }
-    }
-    return true;
-}
-
+/* Returns true if the '_player' can make any valid move */
 bool ChessBoard::canMove(Colour _player){
 
-    // stalemate occurs when the player cannot legally play any moves
+    // for each remaining piece of the same colour as _player
+    // try moving it to any other square:
+
+    // iterate through the board to get a source square
     for(int rank=0; rank<8; rank++){
         for(int file=0; file<8; file++){
+            // iterate through the board to find destination square
             for(int row=0; row<8; row++){
                 for(int column=0; column<8; column++){
+                    // _player can move if any piece finds a valid move
                     if((board[rank][file]!=NULL)
                         && (board[rank][file]->pieceColour==_player)
-                        && (board[rank][file]->canMove(rank, file, row, column, 
+                        && (board[rank][file]->isMoveValid(rank, file, row, column, 
                             board, chessPieces))){
                         return true;
                     }
@@ -218,6 +226,7 @@ bool ChessBoard::canMove(Colour _player){
     return false;
 }
 
+/* Changes 'player' attribute from white to black and from black to white */
 void ChessBoard::changePlayer(){
     switch(player){
         case white: player = black; break;
@@ -227,12 +236,9 @@ void ChessBoard::changePlayer(){
     return;
 }
 
-void ChessBoard::getElement(const char _square[2]){
-    int x = _square[1] - '1';
-    int y = _square[0] - 'A';
-    cout<<board[x][y]->name;
-}
+/* Destructs the ChessBoard object*/
 ChessBoard::~ChessBoard(){
+    // deleting all the chess pieces from chessPieces matrix that were created on the heap
     for(int row=0; row<2; row++){
         for(int column=0;column<6; column++){
             delete chessPieces[row][column];
@@ -241,6 +247,7 @@ ChessBoard::~ChessBoard(){
     }
 }
 
+/* Prints current status of the 8x8 board */
 void ChessBoard::printBoard(){
     for(int row=7; row>=0; row--){
         cout<<endl;

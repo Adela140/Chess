@@ -6,9 +6,17 @@ using namespace std;
 #include "piece.h"
 #include "bishop.h"
 
+/**************************** Definitions for Bishop class ******************************/
+
+/* Constructs the Bishop object */
 Bishop::Bishop(Colour _pieceColour) : Piece(_pieceColour, "Bishop"){}
+
+/* Destructs the Bishop object */
 Bishop::~Bishop(){}
-bool Bishop::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]){
+
+/* Returns true if moving diagonally but not leaping over other pieces*/
+bool Bishop::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
+                            Piece* const board[8][8]){
 
     // determine in which direction the bishop is moving
     int rankDirec = (rankEnd > rankStart) ? 1 : -1;
@@ -17,16 +25,16 @@ bool Bishop::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd,
     // to move diagonally, the difference between the destination and source must be 
     // the same for the rank and file
     if((abs(rankEnd-rankStart))==(abs(fileEnd-fileStart))){
-        // iterate through the diagonal in which the bishop is moving to check if it is leaping
-        // over other pieces
-        //cout<<"Bishop moving diagonally"<<endl;
-        //cout<<"rankDir: "<<rankDirec<<" and fileDirec:"<<fileDirec<<endl;
+
+        // iterate through the diagonal in which the bishop is moving to 
+        // check if it is leaping over other pieces
         for(int row = rankStart+rankDirec, column = fileStart+fileDirec; row != rankEnd ; 
             row=row+rankDirec, column=column+fileDirec){
+            // return false if encountering a piece before the destination square
             if (board[row][column]!=NULL){
                 return false;
             }
-            //cout<<"Bishop moving freely"<<endl;
+           
         }
         return true;
     }

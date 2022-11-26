@@ -6,9 +6,17 @@ using namespace std;
 #include "piece.h"
 #include "rook.h"
 
+/****************************** Definitions for Rook class ******************************/
+
+/* Constructs the Rook object */
 Rook::Rook(Colour _pieceColour) : Piece(_pieceColour, "Rook"){}
+
+/* Destructs the Rook object */
 Rook::~Rook(){}
-bool Rook::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, Piece* const board[8][8]){
+
+/* Returns true if moving along a rank or file but not leaping over other pieces */
+bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
+                          Piece* const board[8][8]){
 
     // if moving along a rank
     if (rankStart==rankEnd){
