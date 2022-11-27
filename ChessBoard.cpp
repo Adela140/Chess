@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstring>
+#include <string>
+
 using namespace std;
 
 #include "ChessBoard.h"
@@ -252,13 +254,19 @@ ChessBoard::~ChessBoard(){
 void ChessBoard::printBoard(){
     for(int row=7; row>=0; row--){
         cout<<endl;
-        cout<<"------------------------------------------------------------------------------------"<<endl;
+        cout<<"--------------------------------------------------------------------------"
+            <<"------------------------------"<<endl;
         for(int column=0; column<8; column++){
             if(board[row][column]==NULL){
-                cout<< "     .     ";
+                cout<< "      .     ";
             }
-            else{ 
-            cout<<board[row][column]->pieceColour <<" "<<board[row][column]->name;
+            else{
+                string str = board[row][column]->name;
+                int fill = ((7-(str.length()))/2);
+                cout<<std::string(fill, ' ');
+                cout<<board[row][column]->pieceColour <<" "<<board[row][column]->name;
+                cout<<std::string(fill, ' ');
+                
             }
             cout<<"|";
         }

@@ -23,7 +23,7 @@ bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
         // determine in which direction the rook is moving
         int fileDirec = (fileEnd > fileStart) ? 1 : -1;
         // check that the rook is not leaping over other pieces 
-        for(int column =fileStart+fileDirec; column<fileEnd; column=column+fileDirec){
+        for(int column =fileStart+fileDirec; column!=fileEnd; column=column+fileDirec){
             // return false if encountering a piece before the destination square
             if(board[rankStart][column]!=NULL){
                 return false;
@@ -36,7 +36,7 @@ bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
         // determine in which direction the rook is moving
         int rankDirec = (rankEnd > rankStart) ? 1 : -1;
         // check that the rook is not leaping over other pieces 
-        for(int row =rankStart+rankDirec; row<rankStart; row=row+rankDirec){
+        for(int row =rankStart+rankDirec; row!=rankEnd; row=row+rankDirec){
             // return false if encountering a piece before the destination square
             if(board[row][fileStart]!=NULL){
                 return false;
