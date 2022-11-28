@@ -4,8 +4,6 @@
 #include "piece.h"
 #include "ChessBoard.h"
 
-class ChessBoard;
-
 /**************************** Declarations for Queen class ******************************/
 /* Queen inherits from Piece class */
 

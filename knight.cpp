@@ -5,7 +5,6 @@ using namespace std;
 
 #include "piece.h"
 #include "knight.h"
-#include "ChessBoard.h"
 
 /**************************** Definitions for Knight class *******************************/
 

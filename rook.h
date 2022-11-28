@@ -4,8 +4,6 @@
 #include "piece.h"
 #include "ChessBoard.h"
 
-class ChessBoard;
-
 /***************************** Declarations for Rook class ******************************/
 /* Rook inherits from Piece class */
 

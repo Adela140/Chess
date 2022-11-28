@@ -3,8 +3,8 @@
 #include <string>
 using namespace std;
 
-#include "ChessBoard.h"
 #include "piece.h"
+#include "ChessBoard.h"
 
 /***************************** Definitions for Colour type ******************************/
 

@@ -5,7 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "queen.h"
-#include "ChessBoard.h"
+
 /***************************** Definitions for Queen class ******************************/
 
 /* Constructs the Queen object */

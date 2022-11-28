@@ -2,9 +2,6 @@
 #define KNIGHT_H
 
 #include "piece.h"
-#include "ChessBoard.h"
-
-class ChessBoard;
 
 /***************************** Declarations for Knight class *****************************/
 /* Knight inherits from Piece class */

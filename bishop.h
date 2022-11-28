@@ -4,8 +4,6 @@
 #include "piece.h"
 #include "ChessBoard.h"
 
-class ChessBoard;
-
 /**************************** Declarations for Bishop class ******************************/
 /* Bishop inherits from Piece class */
 

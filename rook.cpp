@@ -5,7 +5,6 @@ using namespace std;
 
 #include "piece.h"
 #include "rook.h"
-#include "ChessBoard.h"
 
 /****************************** Definitions for Rook class ******************************/
 

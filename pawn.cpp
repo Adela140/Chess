@@ -5,7 +5,6 @@ using namespace std;
 
 #include "piece.h"
 #include "pawn.h"
-#include "ChessBoard.h"
 
 /**************************** Definitions for Pawn class ********************************/
 

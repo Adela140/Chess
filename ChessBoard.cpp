@@ -1,17 +1,9 @@
 #include <iostream>
 #include <cstring>
 #include <string>
-
 using namespace std;
 
 #include "ChessBoard.h"
-#include "piece.h"
-#include "king.h"
-#include "queen.h"
-#include "rook.h"
-#include "knight.h"
-#include "bishop.h"
-#include "pawn.h"
 
 /************************** Definitions for ChessBoard class ****************************/
 

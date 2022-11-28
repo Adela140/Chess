@@ -2,7 +2,12 @@
 #define CHESSBOARD_H
 
 #include "piece.h"
-
+#include "king.h"
+#include "queen.h"
+#include "rook.h"
+#include "knight.h"
+#include "bishop.h"
+#include "pawn.h"
 
 /************************** Declarations for ChessBoard class ***************************/
 

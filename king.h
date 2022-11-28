@@ -2,9 +2,6 @@
 #define KING_H
 
 #include "piece.h"
-#include "ChessBoard.h"
-
-class ChessBoard;
 
 /***************************** Declarations for King class ******************************/
 /* King inherits from Piece class */

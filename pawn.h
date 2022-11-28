@@ -4,8 +4,6 @@
 #include "piece.h"
 #include "ChessBoard.h"
 
-class ChessBoard;
-
 /***************************** Declarations for Pawn class ******************************/
 /* Knight inherits from Pawn class */
 
