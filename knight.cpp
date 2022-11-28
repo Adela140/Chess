@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "knight.h"
+#include "ChessBoard.h"
 
 /**************************** Definitions for Knight class *******************************/
 
@@ -17,7 +18,7 @@ Knight::~Knight(){}
 /* Returns true if moving two squares vertically and one square horizontally, 
    or two squares horizontally and one square vertically */ 
 bool Knight::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                            Piece* const board[8][8]){
+                            const ChessBoard* const _cb){
 
     // return true if moving two squares vertically and one horizontally 
     if((abs(rankEnd-rankStart))==1 && (abs(fileEnd-fileStart))==2){

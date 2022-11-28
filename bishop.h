@@ -2,6 +2,9 @@
 #define BISHOP_H
 
 #include "piece.h"
+#include "ChessBoard.h"
+
+class ChessBoard;
 
 /**************************** Declarations for Bishop class ******************************/
 /* Bishop inherits from Piece class */
@@ -12,7 +15,7 @@ class Bishop: public Piece {
          * Parameters: integer indeces of rank and files of the source and destination, 
            and the 8x8 board containing current state of the game */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                            Piece* const board[8][8]);
+                            const ChessBoard* const _cb);
     public:
         /* Contructs a Bishop object with default name (inherited from Piece) "Bishop"
          * Parameters: colour of the piece (White or Black) */

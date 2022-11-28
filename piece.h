@@ -4,6 +4,8 @@
 #include <string>
 using namespace std;
 
+class ChessBoard;
+
 /***************************** Declarations for Colour type ******************************/
 enum Colour{white, black};
 
@@ -27,7 +29,7 @@ class Piece {
         /* Returns true if the destination square does not contain a piece 
            of the same colour
          * Parameters: integer indeces of the destination square and 8x8 board*/
-        bool isDestinationLegal(int rankEnd, int fileEnd, Piece* const board[8][8]);
+        bool isDestinationLegal(int rankEnd, int fileEnd, const ChessBoard* const _cb);
 
         /* Pure virtual function 
          * When implemented by the chess pieces (derived classes), it returns true if 
@@ -35,7 +37,7 @@ class Piece {
          * Parameters: integer indeces of rank and files of the source and destination, 
            and the 8x8 board containing current state of the game */
         virtual bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                                    Piece* const board[8][8]) =0;
+                                    const ChessBoard* const _cb) =0;
         
         /* Checks if a king is in check 
          * For any Piece that is not a King, it returns false 
@@ -43,7 +45,7 @@ class Piece {
          * Parameters: 8x8 board and _chessPiece matrix containing the king pointers 
             - the king pointers are needed because the method checks for any valid moves
               of other player's pieces which do not put its own king in check */
-        virtual bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
+        //virtual bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
 
     friend class ChessBoard; 
     
@@ -63,7 +65,7 @@ class Piece {
            and the 8x8 board containing current state of the game, and chessPiece matrix
            containing the king pointers */
         bool isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                    Piece* board[8][8]);
+                    const ChessBoard* const _cb);
 
         /* Returns the colour of the piece */
         const Colour get_colour() const;

@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "queen.h"
+#include "ChessBoard.h"
 /***************************** Definitions for Queen class ******************************/
 
 /* Constructs the Queen object */
@@ -15,7 +16,7 @@ Queen::~Queen(){}
 
 /* Returns true if moving along a rank, file or diagonally, but not leaping over others */
 bool Queen::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                           Piece* const board[8][8]){
+                           const ChessBoard* const _cb){
 
     // determine in which direction the queen is moving 
     int rankDirec;
@@ -39,7 +40,7 @@ bool Queen::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEn
         for(int row=rankStart+rankDirec, column=fileStart+fileDirec; row!=rankEnd
             || column!=fileEnd; row=row+rankDirec, column=column+fileDirec){
                 // return false if encountering a piece before the destination square
-                if(board[row][column]!=NULL){
+                if(_cb->get_piece(row,column)!=NULL){
                     return false;
                 }
         }

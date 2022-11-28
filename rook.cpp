@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "rook.h"
+#include "ChessBoard.h"
 
 /****************************** Definitions for Rook class ******************************/
 
@@ -16,7 +17,7 @@ Rook::~Rook(){}
 
 /* Returns true if moving along a rank or file but not leaping over other pieces */
 bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                          Piece* const board[8][8]){
+                          const ChessBoard* const _cb){
 
     // if moving along a rank
     if (rankStart==rankEnd){
@@ -25,7 +26,7 @@ bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
         // check that the rook is not leaping over other pieces 
         for(int column =fileStart+fileDirec; column!=fileEnd; column=column+fileDirec){
             // return false if encountering a piece before the destination square
-            if(board[rankStart][column]!=NULL){
+            if(_cb->get_piece(rankStart,column)!=NULL){
                 return false;
             }
         }
@@ -38,7 +39,7 @@ bool Rook::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
         // check that the rook is not leaping over other pieces 
         for(int row =rankStart+rankDirec; row!=rankEnd; row=row+rankDirec){
             // return false if encountering a piece before the destination square
-            if(board[row][fileStart]!=NULL){
+            if(_cb->get_piece(row,fileStart)!=NULL){
                 return false;
             }
         }

@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+#include "ChessBoard.h"
 #include "piece.h"
 
 /***************************** Definitions for Colour type ******************************/
@@ -35,16 +36,16 @@ Piece::Piece(Colour _pieceColour, string _name): pieceColour(_pieceColour), name
 Piece::~Piece(){}
 
 /* Returns false if Piece is not King */
-bool Piece::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){return false;}
+//bool Piece::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){return false;}
 
 /* Returns true if the move of the piece is valid */
 bool Piece::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                        Piece* board[8][8]){
+                        const ChessBoard* const _cb){
 
     // make sure that the destination does not contain a piece of the same colour 
     // and that the piece is moving according to its rules
-    if(isDestinationLegal(rankEnd, fileEnd, board)
-        && legalPieceMove(rankStart, fileStart, rankEnd, fileEnd, board)){
+    if(isDestinationLegal(rankEnd, fileEnd, _cb)
+        && legalPieceMove(rankStart, fileStart, rankEnd, fileEnd, _cb)){
         
       /*  // check if the move would put your own king in check:
 
@@ -76,11 +77,11 @@ bool Piece::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd,
 }
     
 /* Returns true if the destination square does not contain a piece of the same colour */
-bool Piece::isDestinationLegal(int rankEnd, int fileEnd, Piece* const board[8][8]){
+bool Piece::isDestinationLegal(int rankEnd, int fileEnd, const ChessBoard* const _cb){
 
     //if the destination is not NULL, it cannot contain the same colour as the player
-    if(board[rankEnd][fileEnd]!=NULL){
-        if (board[rankEnd][fileEnd]->pieceColour == this->pieceColour){
+    if(_cb->get_piece(rankEnd,fileEnd)!=NULL){
+        if (_cb->get_piece(rankEnd,fileEnd)->pieceColour == this->pieceColour){
             return false;
         }
     }

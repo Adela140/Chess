@@ -2,6 +2,9 @@
 #define QUEEN_H
 
 #include "piece.h"
+#include "ChessBoard.h"
+
+class ChessBoard;
 
 /**************************** Declarations for Queen class ******************************/
 /* Queen inherits from Piece class */
@@ -13,7 +16,7 @@ class Queen: public Piece {
          * Parameters: integer indeces of rank and files of the source and destination, 
            and the 8x8 board containing current state of the game */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                            Piece* const board[8][8]);
+                            const ChessBoard* const _cb);
     public:
         /* Contructs a Queen object with default name (inherited from Piece) "Queen"
          * Parameters: colour of the piece (White or Black) */

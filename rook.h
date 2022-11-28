@@ -2,6 +2,9 @@
 #define ROOK_H
 
 #include "piece.h"
+#include "ChessBoard.h"
+
+class ChessBoard;
 
 /***************************** Declarations for Rook class ******************************/
 /* Rook inherits from Piece class */
@@ -12,7 +15,7 @@ class Rook: public Piece {
          * Parameters: integer indeces of rank and files of the source and destination, 
            and the 8x8 board containing current state of the game */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                            Piece* const board[8][8]);
+                            const ChessBoard* const _cb);
     public:
         /* Contructs a Rook object with default name (inherited from Piece) "Rook"
          * Parameters: colour of the piece (White or Black) */

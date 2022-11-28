@@ -210,7 +210,7 @@ bool ChessBoard::inCheck(Colour player){
                 // check if the piece is opposite player's
                 if((board[row][column]->get_colour()!=king_ptr->get_colour())
                 && (board[row][column]->isMoveValid(row, column, kingRow, kingColumn, 
-                                                    board))){
+                                                    this))){
             
                 return true;
                 }
@@ -224,7 +224,7 @@ bool ChessBoard::inCheck(Colour player){
 
 bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int fileEnd){
     if(board[rankStart][fileStart]->isMoveValid(rankStart, fileStart, rankEnd,
-                                                 fileEnd, board)){
+                                                 fileEnd,this)){
         // check if the move would put your own king in check:
 
         // keep track of the contents of the destination and source square
@@ -344,4 +344,9 @@ void ChessBoard::printBoard(){
         }
     }
     cout<<endl;
+
+}
+
+const Piece* ChessBoard::get_piece(int rank, int file) const {
+        return board[rank][file];
 }

@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "bishop.h"
+#include "ChessBoard.h"
 
 /**************************** Definitions for Bishop class ******************************/
 
@@ -16,7 +17,7 @@ Bishop::~Bishop(){}
 
 /* Returns true if moving diagonally but not leaping over other pieces*/
 bool Bishop::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                            Piece* const board[8][8]){
+                            const ChessBoard* const _cb){
 
     // determine in which direction the bishop is moving
     int rankDirec = (rankEnd > rankStart) ? 1 : -1;
@@ -31,7 +32,7 @@ bool Bishop::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileE
         for(int row = rankStart+rankDirec, column = fileStart+fileDirec; row != rankEnd ; 
             row=row+rankDirec, column=column+fileDirec){
             // return false if encountering a piece before the destination square
-            if (board[row][column]!=NULL){
+            if (_cb->get_piece(row,column)!=NULL){
                 return false;
             }
            

@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "king.h"
+//#include "ChessBoard.h"
 
 /**************************** Definitions for King class ********************************/
 
@@ -16,7 +17,7 @@ King::~King(){}
 
 /* Returns true if moving one square in any direction */
 bool King::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                          Piece* const board[8][8]){
+                          const ChessBoard* const _cb){
     
     int rankDifference = rankEnd - rankStart;
     int fileDifference = fileEnd - fileStart;

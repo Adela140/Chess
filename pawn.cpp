@@ -5,6 +5,7 @@ using namespace std;
 
 #include "piece.h"
 #include "pawn.h"
+#include "ChessBoard.h"
 
 /**************************** Definitions for Pawn class ********************************/
 
@@ -16,14 +17,14 @@ Pawn::~Pawn(){}
 
 /* Returns true if Pawn moving legally */
 bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                          Piece* const board[8][8]){
+                          const ChessBoard* const _cb){
     int rankDirec;
     // if pawn is white, rank direction must be +1
     // if pawn is black, rank direction must be -1
     if(pieceColour==white){rankDirec=1;}
     else if(pieceColour==black){rankDirec=-1;}
     // if capturing another piece 
-    if(board[rankEnd][fileEnd]!=NULL){
+    if(_cb->get_piece(rankEnd,fileEnd)!=NULL){
         // check if the move is one square diagonally in front of the source square
         // if pawn is white destination rank must be larger by one
         // if black it must be smaller by one
@@ -33,7 +34,7 @@ bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
         return false;
     }
     // if moving to unoccupied square
-    else if(board[rankEnd][fileEnd]==NULL){
+    else if(_cb->get_piece(rankEnd,fileEnd)==NULL){
         
         // if the first move(so the _sourceSquare has rank 1 or 6), 
         // it can move up to two places
@@ -42,7 +43,7 @@ bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
             if((fileEnd==fileStart) && ((rankEnd-rankStart)==(2*rankDirec))){
                 for(int row = rankStart+rankDirec; row!=rankEnd; row=row+rankDirec){
                     // return false if encountering a piece before the destination square
-                    if(board[row][fileStart]!=NULL){
+                    if(_cb->get_piece(row,fileStart)!=NULL){
                         return false;
                     }
                 }

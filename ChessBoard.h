@@ -3,13 +3,14 @@
 
 #include "piece.h"
 
+
 /************************** Declarations for ChessBoard class ***************************/
 
 /* ChessBoard provides an interface through which players can interact with 
    chess pieces in an 8x8 board */
 
 class ChessBoard{
-    private:
+   private:
         Colour player; // the colour of the current player
         Piece* chessPieces[2][6]; // matrix of all the pieces needed in chess
         Piece* board[8][8]; // 8x8 chess board
@@ -48,6 +49,7 @@ class ChessBoard{
         /* Returns true if the current player made the other player be in checkmate or
            stalemate */
         bool endOfGame();
+      
 
     public:
         /* Constructs the ChessBoard to contain an 8x8 board with pieces set up
@@ -72,6 +74,8 @@ class ChessBoard{
         
         /* Prints current status of the 8x8 board */
         void printBoard();
+
+        const Piece* get_piece(int rank, int file) const;
     
 };
 
