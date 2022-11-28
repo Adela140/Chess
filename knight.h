@@ -14,7 +14,7 @@ class Knight: public Piece {
         /* Returns true if moving two squares vertically and one square horizontally, 
            or two squares horizontally and one square vertically
          * Parameters: integer indeces of rank and files of the source and destination, 
-           and the 8x8 board containing current state of the game */
+           and pointer to a ChessBoard object */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                             const ChessBoard* const _cb);
     public:

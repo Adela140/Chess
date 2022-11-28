@@ -144,6 +144,7 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         return true;
     }
 
+    // otherwise, the move is refused
     cout<< player <<"'s "<< board[rankSource][fileSource]->name 
         << " cannot move to "<< destination_square <<"!"<<endl;
 
@@ -183,9 +184,9 @@ bool ChessBoard::correctPlayer(int start_row, int start_column){
     return(board[start_row][start_column]->pieceColour==player);
 }
 
-/* Returns true if King is in check */
+/* Returns true if king of 'player' argument is in check */
 bool ChessBoard::inCheck(Colour player){
-    // determine which king is relevant
+    // determine which king is relevant:
     // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
     // and white=0 and black=1
     Piece* king_ptr= chessPieces[player][0];
@@ -204,27 +205,27 @@ bool ChessBoard::inCheck(Colour player){
     }
     
     // king in check if its position is a valid move for any of the opposite player's pieces
+    // (this does not take into account if the move "capturing" the other player's king 
+    // would put its own king in check)
     for (int row=0; row<8; row++){
         for(int column=0; column<8; column++){
-            if(board[row][column]!=NULL){
-                // check if the piece is opposite player's
-                if((board[row][column]->get_colour()!=king_ptr->get_colour())
-                && (board[row][column]->isMoveValid(row, column, kingRow, kingColumn, 
-                                                    this))){
-            
-                return true;
-                }
+            // return true if a piece can legally move onto the king position
+            if((board[row][column]!=NULL) && 
+               (board[row][column]->isMoveValid(row, column, kingRow, kingColumn, this))){
+                    return true;
             }
         }
     }
-
     return false;
-
 }
 
+/* Returns true if the move is valid with respect to the piece rule and the destination, 
+   and if it does not put your own king in check */
 bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int fileEnd){
-    if(board[rankStart][fileStart]->isMoveValid(rankStart, fileStart, rankEnd,
-                                                 fileEnd,this)){
+    
+    // check if the move is valid based on the piece's inidividual rules and the destination
+    if(board[rankStart][fileStart]->isMoveValid(rankStart,fileStart, rankEnd,fileEnd,this)){
+        
         // check if the move would put your own king in check:
 
         // keep track of the contents of the destination and source square
@@ -244,15 +245,13 @@ bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int
                 return false;
         }
 
-        // reset the board to state before the move
-        // this is done because the 'isMoveValid' method is also used in the 'inCheck' 
-        // method, so it cannot change the board if we only check for if a king is in check 
+        // reset the board to state before the move to prevent side effects when
+        // this method is used for 'canMove' method
         board[rankStart][fileStart]=board[rankEnd][fileEnd];
         board[rankEnd][fileEnd]=destination_piece;
             
         return true;
     }
-
     return false;
 }
 
@@ -288,7 +287,8 @@ bool ChessBoard::canMove(Colour _player){
             // iterate through the board to find destination square
             for(int row=0; row<8; row++){
                 for(int column=0; column<8; column++){
-                    // _player can move if any piece finds a valid move
+                    // _player can move if any piece finds a valid move that does not 
+                    // result in its own king in check
                     if((board[rank][file]!=NULL)
                         && (board[rank][file]->pieceColour==_player)
                         && (validMoveNoCheck(rank,file,row,column))){
@@ -303,12 +303,11 @@ bool ChessBoard::canMove(Colour _player){
 
 /* Changes 'player' attribute from white to black and from black to white */
 void ChessBoard::changePlayer(){
-    switch(player){
-        case white: player = black; break;
-        case black: player = white; break;
-        default: player = white; break;
-    }
-    return;
+    player = !player;
+}
+
+const Piece* ChessBoard::get_piece(int rank, int file) const {
+        return board[rank][file];
 }
 
 /* Destructs the ChessBoard object*/
@@ -347,6 +346,4 @@ void ChessBoard::printBoard(){
 
 }
 
-const Piece* ChessBoard::get_piece(int rank, int file) const {
-        return board[rank][file];
-}
+

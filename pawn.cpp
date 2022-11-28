@@ -10,7 +10,7 @@ using namespace std;
 /**************************** Definitions for Pawn class ********************************/
 
 /* Constructs the Pawn object */
-Pawn::Pawn(Colour _pieceColour) : Piece(_pieceColour, "Pawn"){}
+Pawn::Pawn(Colour _pieceColour) : Piece("Pawn", _pieceColour){}
 
 /* Destructs the Pawn object */
 Pawn::~Pawn(){}

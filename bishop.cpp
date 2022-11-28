@@ -10,7 +10,7 @@ using namespace std;
 /**************************** Definitions for Bishop class ******************************/
 
 /* Constructs the Bishop object */
-Bishop::Bishop(Colour _pieceColour) : Piece(_pieceColour, "Bishop"){}
+Bishop::Bishop(Colour _pieceColour) : Piece("Bishop", _pieceColour){}
 
 /* Destructs the Bishop object */
 Bishop::~Bishop(){}
@@ -34,8 +34,7 @@ bool Bishop::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileE
             // return false if encountering a piece before the destination square
             if (_cb->get_piece(row,column)!=NULL){
                 return false;
-            }
-           
+            }        
         }
         return true;
     }

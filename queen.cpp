@@ -9,7 +9,7 @@ using namespace std;
 /***************************** Definitions for Queen class ******************************/
 
 /* Constructs the Queen object */
-Queen::Queen(Colour _pieceColour) : Piece(_pieceColour, "Queen"){}
+Queen::Queen(Colour _pieceColour) : Piece("Queen", _pieceColour){}
 
 /* Destructs the Queen object */
 Queen::~Queen(){}

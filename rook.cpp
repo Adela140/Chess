@@ -10,7 +10,7 @@ using namespace std;
 /****************************** Definitions for Rook class ******************************/
 
 /* Constructs the Rook object */
-Rook::Rook(Colour _pieceColour) : Piece(_pieceColour, "Rook"){}
+Rook::Rook(Colour _pieceColour) : Piece("Rook", _pieceColour){}
 
 /* Destructs the Rook object */
 Rook::~Rook(){}

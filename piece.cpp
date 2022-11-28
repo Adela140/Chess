@@ -30,7 +30,7 @@ Colour operator!(Colour _colour){
 /***************************** Definitions for Piece class ******************************/
 
 /* Constructs Piece object */
-Piece::Piece(Colour _pieceColour, string _name): pieceColour(_pieceColour), name(_name){}
+Piece::Piece(string _name, Colour _pieceColour): name(_name), pieceColour(_pieceColour){}
 
 /* Destructs the Piece object */
 Piece::~Piece(){}
@@ -88,10 +88,6 @@ bool Piece::isDestinationLegal(int rankEnd, int fileEnd, const ChessBoard* const
     return true;
 }
 
-/* Returns the colour of the piece */
-const Colour Piece::get_colour() const {
-    return pieceColour;
-}
 
 
     

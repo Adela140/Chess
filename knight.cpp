@@ -10,7 +10,7 @@ using namespace std;
 /**************************** Definitions for Knight class *******************************/
 
 /* Constructs the Knight object */
-Knight::Knight(Colour _pieceColour) : Piece(_pieceColour, "Knight"){}
+Knight::Knight(Colour _pieceColour) : Piece("Knight", _pieceColour){}
 
 /* Destructs the Knight object */
 Knight::~Knight(){}

@@ -13,7 +13,7 @@ class Rook: public Piece {
     private:
         /* Returns true if moving along a rank or file but not leaping over other pieces 
          * Parameters: integer indeces of rank and files of the source and destination, 
-           and the 8x8 board containing current state of the game */
+           and pointer to a ChessBoard object */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                             const ChessBoard* const _cb);
     public:

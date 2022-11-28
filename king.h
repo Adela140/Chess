@@ -13,7 +13,7 @@ class King: public Piece {
     private:
         /* Returns true if moving one square in any direction
          * Parameters: integer indeces of rank and files of the source and destination, 
-           and the 8x8 board containing current state of the game */
+           and pointer to a ChessBoard object */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                             const ChessBoard* const _cb);
     public:
@@ -23,12 +23,7 @@ class King: public Piece {
 
         /* Destructs the King object */
         ~King();
-
-        /* Returns true if King is in check
-         * Parameters: 8x8 board and _chessPiece matrix containing the king pointers 
-            - the king pointers are needed because the method checks for any valid moves
-              of other player's pieces which do not put its own king in check */
-        //bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
+        
 };
 
 #endif
