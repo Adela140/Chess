@@ -38,6 +38,10 @@ class ChessBoard{
         /* Sets all the squares in the 8x8 board to null */
         void clearBoard();
 
+        bool inCheck(Colour player);
+
+        bool validMoveNoCheck(int start_row, int start_column, int end_row, int end_column);
+
         /* Returns true if the '_player' can make any valid move with any of its pieces */
         bool canMove(Colour _player);
 

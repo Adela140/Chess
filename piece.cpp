@@ -39,14 +39,14 @@ bool Piece::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){return f
 
 /* Returns true if the move of the piece is valid */
 bool Piece::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                        Piece* board[8][8], Piece* const _chessPiece[2][6]){
+                        Piece* board[8][8]){
 
     // make sure that the destination does not contain a piece of the same colour 
     // and that the piece is moving according to its rules
     if(isDestinationLegal(rankEnd, fileEnd, board)
         && legalPieceMove(rankStart, fileStart, rankEnd, fileEnd, board)){
-
-        // check if the move would put your own king in check:
+        
+      /*  // check if the move would put your own king in check:
 
         // keep track of the contents of the destination square
         Piece* destination_piece = board[rankEnd][fileEnd];
@@ -69,7 +69,7 @@ bool Piece::isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd,
         // method, so it cannot change the board if we only check for if a king is in check 
         board[rankStart][fileStart]=board[rankEnd][fileEnd];
         board[rankEnd][fileEnd]=destination_piece;
-
+        */
         return true;
     }
     return false;

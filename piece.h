@@ -63,7 +63,7 @@ class Piece {
            and the 8x8 board containing current state of the game, and chessPiece matrix
            containing the king pointers */
         bool isMoveValid(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                    Piece* board[8][8], Piece* const _chessPiece[2][6]);
+                    Piece* board[8][8]);
 
         /* Returns the colour of the piece */
         const Colour get_colour() const;

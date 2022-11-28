@@ -108,9 +108,9 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
     Piece* destination_piece = board[rankDestination][fileDestination];
     Piece* source_piece = board[rankSource][fileSource];
 
-    // check if the piece in source square can make the move legally
-    if(board[rankSource][fileSource]->isMoveValid(rankSource, fileSource, rankDestination,
-                                                 fileDestination, board, chessPieces)){
+    // check if the piece in source square can make the move legally and does not cause
+    // own king to be in check
+    if(validMoveNoCheck(rankSource, fileSource, rankDestination, fileDestination)){
         // if the move is valid, move the piece to the destination square 
         // and remove it from source square
         board[rankDestination][fileDestination]=source_piece;
@@ -124,7 +124,7 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         }
         cout<<endl;
 
-        // check if the move ended the game (the other player is in checkmate or stalemate)
+        // check if the move ended the game (if the other player is in checkmate or stalemate)
         if(endOfGame()){
             gameOver=true;
             return true;
@@ -133,8 +133,8 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         // if not the end of game, check if the move put other Player's king in check
         // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
         // and white=0 and black=1
-        Colour otherPlayer =  static_cast<Colour>(!player);
-        if((chessPieces[otherPlayer][0]->inCheck(board, chessPieces))){
+        Colour otherPlayer = (!player);
+        if((inCheck(otherPlayer))){
             cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in check"<<endl;
         }
 
@@ -183,16 +183,89 @@ bool ChessBoard::correctPlayer(int start_row, int start_column){
     return(board[start_row][start_column]->pieceColour==player);
 }
 
+/* Returns true if King is in check */
+bool ChessBoard::inCheck(Colour player){
+    // determine which king is relevant
+    // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
+    // and white=0 and black=1
+    Piece* king_ptr= chessPieces[player][0];
+
+    // find position of the king
+    int kingRow;
+    int kingColumn;
+
+    for(int row=0; row<8; row++){
+        for (int column=0; column<8; column++){
+            if(board[row][column] == king_ptr){
+                kingColumn= column;
+                kingRow = row;
+            }
+        }
+    }
+    
+    // king in check if its position is a valid move for any of the opposite player's pieces
+    for (int row=0; row<8; row++){
+        for(int column=0; column<8; column++){
+            if(board[row][column]!=NULL){
+                // check if the piece is opposite player's
+                if((board[row][column]->get_colour()!=king_ptr->get_colour())
+                && (board[row][column]->isMoveValid(row, column, kingRow, kingColumn, 
+                                                    board))){
+            
+                return true;
+                }
+            }
+        }
+    }
+
+    return false;
+
+}
+
+bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int fileEnd){
+    if(board[rankStart][fileStart]->isMoveValid(rankStart, fileStart, rankEnd,
+                                                 fileEnd, board)){
+        // check if the move would put your own king in check:
+
+        // keep track of the contents of the destination and source square
+        Piece* destination_piece = board[rankEnd][fileEnd];
+        Piece* source_piece = board[rankStart][fileStart];
+
+        // move the piece to the destination square and remove it from source square
+        board[rankEnd][fileEnd]=board[rankStart][fileStart];
+        board[rankStart][fileStart]=NULL;
+
+        // based on the updated board, 
+        // if your own king is in check reset the pointers to original squares
+        // and the move is invalid
+        if ((inCheck(source_piece->pieceColour))){
+            board[rankStart][fileStart]=board[rankEnd][fileEnd];
+            board[rankEnd][fileEnd]=destination_piece;
+                return false;
+        }
+
+        // reset the board to state before the move
+        // this is done because the 'isMoveValid' method is also used in the 'inCheck' 
+        // method, so it cannot change the board if we only check for if a king is in check 
+        board[rankStart][fileStart]=board[rankEnd][fileEnd];
+        board[rankEnd][fileEnd]=destination_piece;
+            
+        return true;
+    }
+
+    return false;
+}
+
 /* Returns true if the current player made the other player be in checkmate or stalemate */
 bool ChessBoard::endOfGame(){
-    
+
     Colour otherPlayer =  static_cast<Colour>(!player); // this would be the future player
     // end of game if other player cannot move without putting king in check:
     // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
     // and white=0 and black=1
     if(!(canMove(otherPlayer))){
         // if the player cannot legally move AND is in check, player is in checkmate
-        if((chessPieces[otherPlayer][0]->inCheck(board, chessPieces))){
+        if((inCheck(otherPlayer))){
             cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in checkmate"<<endl;
             return true;
         }
@@ -218,8 +291,7 @@ bool ChessBoard::canMove(Colour _player){
                     // _player can move if any piece finds a valid move
                     if((board[rank][file]!=NULL)
                         && (board[rank][file]->pieceColour==_player)
-                        && (board[rank][file]->isMoveValid(rank, file, row, column, 
-                            board, chessPieces))){
+                        && (validMoveNoCheck(rank,file,row,column))){
                         return true;
                     }
                 }

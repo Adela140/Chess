@@ -25,7 +25,7 @@ class King: public Piece {
          * Parameters: 8x8 board and _chessPiece matrix containing the king pointers 
             - the king pointers are needed because the method checks for any valid moves
               of other player's pieces which do not put its own king in check */
-        bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
+        //bool inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]);
 };
 
 #endif

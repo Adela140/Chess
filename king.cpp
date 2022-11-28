@@ -28,6 +28,7 @@ bool King::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
 }
 
 /* Returns true if King is in check */
+/*
 bool King::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){
     
     // find position of the king
@@ -61,3 +62,4 @@ bool King::inCheck(Piece* board[8][8], Piece* const _chessPiece[2][6]){
     return false;
 
 }
+*/
