@@ -2,12 +2,6 @@
 #define CHESSBOARD_H
 
 #include "piece.h"
-#include "king.h"
-#include "queen.h"
-#include "rook.h"
-#include "knight.h"
-#include "bishop.h"
-#include "pawn.h"
 
 /************************** Declarations for ChessBoard class ***************************/
 
@@ -43,8 +37,10 @@ class ChessBoard{
        * Parameters: integer indeces indicating the row and column of start square */
       bool correctPlayer(int start_row, int start_column);
 
-      /* Sets all the squares in the 8x8 board to null */
-      void clearBoard();
+      /* Returns true if the destination square does not contain a piece 
+         of the same colour as we are trying to move
+       * Parameters: integer indeces of the source and destination squares */
+      bool isDestinationLegal(int rankStart, int fileStart, int rankEnd, int fileEnd);
 
       /* Returns true if King is in check
        * Parameters: player (White or Black) for which we want to determine if their king
@@ -61,7 +57,10 @@ class ChessBoard{
       /* Returns true if the current player made the other player be in checkmate or
          stalemate */
       bool endOfGame();
-      
+
+      /* Sets all the squares in the 8x8 board to null */
+      void clearBoard();
+
    public:
 
       /* Constructs the ChessBoard to contain an 8x8 board with pieces set up

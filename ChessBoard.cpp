@@ -4,6 +4,12 @@
 using namespace std;
 
 #include "ChessBoard.h"
+#include "king.h"
+#include "queen.h"
+#include "rook.h"
+#include "knight.h"
+#include "bishop.h"
+#include "pawn.h"
 
 /************************** Definitions for ChessBoard class ****************************/
 
@@ -176,6 +182,19 @@ bool ChessBoard::correctPlayer(int start_row, int start_column){
     return(board[start_row][start_column]->pieceColour==player);
 }
 
+/* Returns true if the destination square does not contain a piece of the same colour */
+bool ChessBoard::isDestinationLegal(int rankStart, int fileStart, int rankEnd, int fileEnd){
+
+    // if the destination is not NULL, it cannot contain the same colour as the 
+    // piece you are moving (the colour of the player)
+    if(board[rankEnd][fileEnd]!=NULL){
+        if (board[rankEnd][fileEnd]->pieceColour == board[rankStart][fileStart]->pieceColour){
+            return false;
+        }
+    }
+    return true;
+}
+
 /* Returns true if king of 'player' argument is in check */
 bool ChessBoard::inCheck(Colour player){
     // determine which king is relevant:
@@ -203,7 +222,8 @@ bool ChessBoard::inCheck(Colour player){
         for(int column=0; column<8; column++){
             // return true if a piece can legally move onto the king position
             if((board[row][column]!=NULL) && 
-               (board[row][column]->isMoveValid(row, column, kingRow, kingColumn, this))){
+               (isDestinationLegal(row, column, kingRow, kingColumn)) &&
+               (board[row][column]->legalPieceMove(row, column, kingRow, kingColumn, this))){
                     return true;
             }
         }
@@ -215,8 +235,10 @@ bool ChessBoard::inCheck(Colour player){
    and if it does not put your own king in check */
 bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int fileEnd){
     
-    // check if the move is valid based on the piece's inidividual rules and the destination
-    if(board[rankStart][fileStart]->isMoveValid(rankStart,fileStart, rankEnd,fileEnd,this)){
+    // make sure that the piece is moving according to its rules and 
+    // that the destination does not contain a piece of the same colour 
+    if((board[rankStart][fileStart]->legalPieceMove(rankStart,fileStart,rankEnd,fileEnd,this))
+        &&(isDestinationLegal(rankStart,fileStart, rankEnd,fileEnd))){
         
         // check if the move would put your own king in check:
 
@@ -247,26 +269,6 @@ bool ChessBoard::validMoveNoCheck(int rankStart, int fileStart, int rankEnd, int
     return false;
 }
 
-/* Returns true if the current player made the other player be in checkmate or stalemate */
-bool ChessBoard::endOfGame(){
-
-    Colour otherPlayer =  static_cast<Colour>(!player); // this would be the future player
-    // end of game if other player cannot move without putting king in check:
-    // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
-    // and white=0 and black=1
-    if(!(canMove(otherPlayer))){
-        // if the player cannot legally move AND is in check, player is in checkmate
-        if((inCheck(otherPlayer))){
-            cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in checkmate"<<endl;
-            return true;
-        }
-        // otherwise player is in stalemate
-        cout<< otherPlayer<<" is in stalemate"<<endl;
-        return true;
-    }      
-    return false;
-}
-
 /* Returns true if the '_player' can make any valid move */
 bool ChessBoard::canMove(Colour _player){
 
@@ -290,6 +292,26 @@ bool ChessBoard::canMove(Colour _player){
             }
         }
     }
+    return false;
+}
+
+/* Returns true if the current player made the other player be in checkmate or stalemate */
+bool ChessBoard::endOfGame(){
+
+    Colour otherPlayer =  static_cast<Colour>(!player); // this would be the future player
+    // end of game if other player cannot move without putting king in check:
+    // note: white king = chessPieces[0][0] and black king = chessPieces[1][0]
+    // and white=0 and black=1
+    if(!(canMove(otherPlayer))){
+        // if the player cannot legally move AND is in check, player is in checkmate
+        if((inCheck(otherPlayer))){
+            cout<< chessPieces[otherPlayer][0]->pieceColour<<" is in checkmate"<<endl;
+            return true;
+        }
+        // otherwise player is in stalemate
+        cout<< otherPlayer<<" is in stalemate"<<endl;
+        return true;
+    }      
     return false;
 }
 
