@@ -15,11 +15,6 @@ class Rook: public Piece {
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                             const ChessBoard* const _cb);
     
-        bool hasMovedA; // keeps track if rook has moved if starting at file A (for castling)
-        bool hasMovedH; // keeps track if rook has moved if starting at file H (for castling)
-    
-    friend class ChessBoard; // allows ChessBoard to access 'hasMoved' for castling
-    
     public:
         /* Contructs a Rook object with default name (inherited from Piece) "Rook"
          * Parameters: colour of the piece (White or Black) */

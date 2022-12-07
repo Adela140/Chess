@@ -13,6 +13,10 @@ using std::cout;
 int main() {
 
 /********************************* TESTING WRONG INPUTS *********************************/
+	cout<<endl;
+	cout << "========================\n";
+	cout << "Testing inputs & player \n";
+	cout << "========================\n\n";
 	ChessBoard chess;
 	
 	// inputs out of range
@@ -21,6 +25,9 @@ int main() {
 	chess.submitMove("K2", "A1");
 	chess.submitMove("B2", "A9");
 	chess.submitMove("B2", "L1");
+	chess.submitMove("a2", "A3");
+	chess.submitMove("A2", "a3");
+	chess.submitMove("!9", "A3");
 
 	// inputs are invalid length
 	// move refused
@@ -35,8 +42,13 @@ int main() {
 	// move refused
 	chess.submitMove("A7", "A6");
 
+	cout<<endl;
 
 /**************************** TESTING THE CHESS PIECE CLASSES ***************************/
+
+	cout << "========================\n";
+	cout << "     Testing pieces     \n";
+	cout << "========================\n\n";
 
 	chess.resetBoard();
 
@@ -331,8 +343,12 @@ int main() {
 	chess.submitMove("F8", "G8");	
 
 	chess.printBoard();
+	cout<<endl;
 
 /*********************************** TESTING CASTLING ***********************************/
+	cout << "========================\n";
+	cout << "     Testing castling   \n";
+	cout << "========================\n\n";
 	// preparing the board
 	chess.resetBoard();
 	chess.submitMove("E2", "E4");
@@ -386,6 +402,57 @@ int main() {
 	chess.submitMove("C1", "H1");
 
 	chess.printBoard();
+	cout<<endl;
+
+/************************************ STALEMATE TEST ************************************/
+	cout << "========================\n";
+	cout << "    Testing stalemate   \n";
+	cout << "========================\n\n";
+	chess.resetBoard();
+	chess.submitMove("E2", "E3");
+	chess.submitMove("A7", "A5");
+	chess.submitMove("D1", "H5");
+	chess.submitMove("A8", "A6");
+	chess.submitMove("H5", "A5");
+	chess.submitMove("H7", "H5");
+	chess.submitMove("H2", "H4");
+	chess.submitMove("A6", "H6");
+	chess.submitMove("A5", "C7");
+	chess.submitMove("F7", "F6");
+	chess.submitMove("C7", "D7");
+	chess.submitMove("E8", "F7");
+	chess.submitMove("D7", "B7");
+	chess.submitMove("D8", "D3");
+	chess.submitMove("B7", "B8");
+	chess.submitMove("D3", "H7");
+	chess.submitMove("B8", "C8");
+	chess.submitMove("F7", "G6");
+	chess.submitMove("C8", "E6");
+	cout<<endl;
+
+/************************************ CHECKMATE TEST ************************************/
+	cout << "========================\n";
+	cout << "    Testing checkmate   \n";
+	cout << "========================\n\n";
+	chess.resetBoard();
+	chess.submitMove("F2", "F3");
+	chess.submitMove("E7", "E5");
+	chess.submitMove("G2", "G4");
+	chess.submitMove("D8", "H4");
+	cout<<endl;
+
+/************************************** EXTRA TEST **************************************/
+	cout << "========================\n";
+	cout << "     Game over tests    \n";
+	cout << "========================\n\n";
+	// loser making another move after game has ended
+	// move refused
+	chess.submitMove("C2", "C3");
+
+	// the winner making another move
+	// move refused
+	chess.submitMove("A7", "A6");
+
 	cout<<endl;
 /************************************** FINAL TEST **************************************/
 
@@ -456,17 +523,7 @@ int main() {
 	cout << '\n';
 
 	cb.submitMove("D3", "G6");
-	cb.printBoard();
 	cout << '\n';
-
-/************************************** EXTRA TEST **************************************/
-	// loser making another move after game has ended
-	// move refused
-	cb.submitMove("E8", "F8");
-
-	// the winner making another move
-	// move refused
-	cb.submitMove("A3", "B3");
 
 	return 0;
 }

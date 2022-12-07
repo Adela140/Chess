@@ -43,11 +43,11 @@ void ChessBoard::resetBoard(){
     // reset next player to white
     player =white;
 
-    // reset 'hasMoved' in king and rook pieces to false
+    // reset all elements in 'hasMoved' to false
     for(int player = 0; player < 2; player++){
-        static_cast<King*>(chessPieces[player][0])->hasMoved = false;
-        static_cast<Rook*>(chessPieces[player][1])->hasMovedA = false;
-        static_cast<Rook*>(chessPieces[player][1])->hasMovedH = false;
+        for(int piece =0; piece<3; piece++){
+            hasMoved[player][piece]=false;
+        } 
     }
 
     // initially set all the squares to NULL
@@ -98,9 +98,11 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
     // do not attempt the move if the game is already over, the inputs are invalid, 
     // the source is not empty or if the incorrect player is making the move:
     if(gameOver){
+        cout<< "Game is already over. Please reset the board."<<endl;
         return false;
     }
     if(!(inputsValid(source_square, destination_square))){
+        cout<< "Coordinates for source or destination are not valid"<<endl;
         return false;
     }
     if(!(sourceNotEmpty(rankSource, fileSource))){
@@ -108,7 +110,8 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
         return false;
     }
     if(!(correctPlayer(rankSource, fileSource))){
-        cout<<"It is not "<<board[rankSource][fileSource]->pieceColour<<"'s turn to move!"<<endl;
+        cout<<"It is not "<<board[rankSource][fileSource]->pieceColour
+            <<"'s turn to move!"<<endl;
         return false;
     }
     
@@ -118,7 +121,7 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
 
     // check if the piece in source square can make the move legally and does not cause
     // own king to be in check
-    // OR check if castling move
+    // OR check if a valid castling move
     if((validMoveNoCheck(rankSource, fileSource, rankDestination, fileDestination))|| 
         validCastlingMove(rankSource, fileSource, rankDestination, fileDestination)){
 
@@ -132,13 +135,14 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
             // empty the other squares
             board[rankDestination][fileDestination]=NULL;
             board[rankSource][fileSource]=NULL;
+
             cout<< player <<"'s "<< source_piece->name 
                 << " has done castling with "<<destination_piece->name << " from "
                 << destination_square <<endl;
         }
+        // if not castling and the move is valid
         else{
-            // if not castling and the move is valid, move the piece to the 
-            // destination square and remove it from source square
+            // move the piece to the destination square and remove it from source square
             board[rankDestination][fileDestination]=source_piece;
             board[rankSource][fileSource]=NULL;
 
@@ -151,15 +155,16 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
             cout<<endl;
         }
 
-        // if king or rook have moved, update hasMoved attribute to true
-        if(source_piece==chessPieces[player][0]){
-            static_cast<King*>(chessPieces[player][0])->hasMoved=true;
+        // if king or rook have moved, update element in hasMoved to true
+        // note: players are white=0 or black=1
+        if(source_piece==chessPieces[player][0]){ 
+            hasMoved[player][0]=true; // if moving a king
         }
-        else if(source_piece==chessPieces[player][1]&& fileSource==0){
-            static_cast<Rook*>(chessPieces[player][1])->hasMovedA=true;
+        else if(source_piece==chessPieces[player][1] && fileSource==0){ 
+            hasMoved[player][1]=true; // if moving a rook from file A
         }
-        else if(source_piece==chessPieces[player][1]&& fileSource==7){
-            static_cast<Rook*>(chessPieces[player][1])->hasMovedH=true;
+        else if(source_piece==chessPieces[player][1] && fileSource==7){ 
+            hasMoved[player][2]=true; // if moving a rook from file H
         }
 
         // check if the move ended the game (if other player is in checkmate or stalemate)
@@ -367,36 +372,43 @@ void ChessBoard::changePlayer(){
     player = !player;
 }
 
+/* Returns true if start square contains king and end square contains rook of the player */
 bool ChessBoard::isCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd){
 
     // source and destination must contain a king and rook (in either order)
     return((board[rankStart][fileStart]==chessPieces[player][0]&&
-            board[rankEnd][fileEnd]==chessPieces[player][1]));
-            
+            board[rankEnd][fileEnd]==chessPieces[player][1]));          
 }
 
+/* Returns true if a castling move is legal */
 bool ChessBoard::validCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd){
-    
+   
+    // return false if move not involving king and rook of the player
+    if(!isCastlingMove(rankStart, fileStart, rankEnd, fileEnd)){
+        return false;
+    }
+
     // neither the king or the rook have moved:
-    // the rook has been input as destination, at file A or H
-    if(!(((fileEnd ==0 && static_cast<Rook*>(chessPieces[player][1])->hasMovedA == false) ||
-       (fileEnd ==7 && static_cast<Rook*>(chessPieces[player][1])->hasMovedH == false)) &&
-       static_cast<King*>(chessPieces[player][0])->hasMoved==false)){
+    // column 1 in hasMoved tracks rook at file A, column 2 tracks rook at file H
+    if(!(((fileEnd ==0 && hasMoved[player][1] == false) ||
+          (fileEnd ==7 && hasMoved[player][2] == false)) &&
+           hasMoved[player][0]==false)){
            return false;
     }
-    // there must be no pieces in between 
+    // there must be no pieces between king and rook
     int fileDirec = (fileEnd > fileStart) ? 1 : -1;
     for(int file =fileStart+fileDirec; file!=fileEnd; file=file+fileDirec){
-        // return false if encountering a piece before the destination square
+        // return false if encountering a piece 
         if(board[rankStart][file]!=NULL){
             return false;
         }
     }
-
     // king must not leave, pass or end upon a square that is attacked
+    // iterate through the board to get a piece
     for (int row=0; row<8; row++){
         for(int column=0; column<8; column++){
-            // return false if an opponent's piece can legally move onto the squares in between
+            // return false if an opponent's piece can legally move onto the squares 
+            // which king leaves from, crosses over or ends up at
             for(int file=fileStart; file!=fileStart+2*fileDirec; file=file+fileDirec){
                 if((board[row][column]!=NULL) && 
                     board[row][column]->pieceColour!=chessPieces[player][0]->pieceColour &&
@@ -410,6 +422,7 @@ bool ChessBoard::validCastlingMove(int rankStart, int fileStart, int rankEnd, in
     return true;
 }
 
+/* Returns a pointer to the piece in position board[rank][file] */
 const Piece* ChessBoard::get_piece(int rank, int file) const {
         return board[rank][file];
 }
