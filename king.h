@@ -13,6 +13,11 @@ class King: public Piece {
            and pointer to a ChessBoard object */
         bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
                             const ChessBoard* const _cb);
+    
+        bool hasMoved; // keeps track of whether the king has moved for castling
+    
+    friend class ChessBoard; // allows ChessBoard to access 'hasMoved' for castling
+    
     public:
         /* Contructs a King object with default name (inherited from Piece) "King"
          * Parameters: colour of the piece (White or Black) */

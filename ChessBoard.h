@@ -58,6 +58,18 @@ class ChessBoard{
          stalemate */
       bool endOfGame();
 
+      /* Returns true if the castling move is valid: 
+         - if neither the king or rook involved have moved before
+         - the king is not leaving, crossing over or ending up in a square that is 
+           under attack from an opponent's piece 
+       * Parameters: rank and file of king (start square) and rook (end square) */
+      bool validCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd);
+
+      /* Returns true if the starting square contains the player's king and the ending 
+         square contains a rook 
+       * Parameters: rank and file of king (start square) and rook (end square) */
+      bool isCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd);
+
       /* Sets all the squares in the 8x8 board to null */
       void clearBoard();
 

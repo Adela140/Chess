@@ -332,6 +332,61 @@ int main() {
 
 	chess.printBoard();
 
+/*********************************** TESTING CASTLING ***********************************/
+	// preparing the board
+	chess.resetBoard();
+	chess.submitMove("E2", "E4");
+	chess.submitMove("E7", "E6");
+	chess.submitMove("D2", "D4");
+	chess.submitMove("D7", "D5");
+	chess.submitMove("B1", "C3");
+	chess.submitMove("F8", "B4");
+	chess.submitMove("F1", "D3");
+	chess.submitMove("B4", "C3");
+	chess.submitMove("B2", "C3");
+	chess.submitMove("H7", "H6");
+	chess.submitMove("C1", "A3");
+	chess.submitMove("B8", "D7");
+	chess.submitMove("D1", "E2");
+	chess.submitMove("D5", "E4");
+	chess.submitMove("D3", "E4");
+	chess.submitMove("G8", "F6");
+	chess.submitMove("E4", "D3");
+	chess.submitMove("B7", "B6");
+	cout << '\n';
+
+	// white king and rook at A1 castling
+	// move accepted
+	chess.submitMove("E1", "A1");
+
+	// black king and rook at H8 castling
+	// move rejected since white bishop attacks F8
+	chess.submitMove("E8", "H8");
+
+	// filler move
+	chess.submitMove("C7", "C5");
+
+	// white king wanting to catle again
+	// move rejected
+	chess.submitMove("C1", "D1");
+
+	// filler move
+	chess.submitMove("D1", "D2");
+
+	// black king and rook at H8 castling when not blocked
+	// move approved
+	chess.submitMove("E8", "H8");
+
+	// filler moves
+	chess.submitMove("G1", "F3");
+	chess.submitMove("F8", "E8");
+
+	// white king trying to do castling again
+	// move refused
+	chess.submitMove("C1", "H1");
+
+	chess.printBoard();
+	cout<<endl;
 /************************************** FINAL TEST **************************************/
 
 	cout << "========================\n";
