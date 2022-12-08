@@ -1,8 +1,8 @@
-chess: ChessMain.o ChessBoard.o piece.o bishop.o king.o knight.o pawn.o queen.o rook.o
-	g++ -g ChessMain.o ChessBoard.o piece.o bishop.o king.o knight.o pawn.o queen.o rook.o -o chess
+chess: ChessTest.o ChessBoard.o piece.o bishop.o king.o knight.o pawn.o queen.o rook.o
+	g++ -g ChessTest.o ChessBoard.o piece.o bishop.o king.o knight.o pawn.o queen.o rook.o -o chess
 
-ChessMain.o: ChessMain.cpp ChessBoard.h piece.h bishop.h king.h knight.h pawn.h queen.h rook.h
-	g++ -Wall -g -c ChessMain.cpp
+ChessTest.o: ChessTest.cpp ChessBoard.h piece.h bishop.h king.h knight.h pawn.h queen.h rook.h
+	g++ -Wall -g -c ChessTest.cpp
 
 ChessBoard.o: ChessBoard.cpp ChessBoard.h piece.h bishop.h king.h knight.h pawn.h queen.h rook.h
 	g++ -Wall -g -c ChessBoard.cpp
