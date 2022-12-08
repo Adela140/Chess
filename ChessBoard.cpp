@@ -189,9 +189,10 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
 
     // if castling refused
     if(isCastlingMove(rankSource, fileSource, rankDestination, fileDestination)){
-       cout<< player <<"'s "<< board[rankSource][fileSource]->name 
-        << " cannot do castling with "<< board[rankDestination][fileDestination]->name 
-        <<" on " << destination_square << endl;
+        int fileDirec = (fileDestination > fileSource) ? 1 : -1;
+        char destination[3]={(fileSource+2*fileDirec)+'A', rankSource+'1','\0'};
+        cout<< player <<"'s "<< board[rankSource][fileSource]->name 
+        << " cannot move to "<< destination <<"!"<<endl;
     }
     // if normal move is refused
     else {
@@ -375,7 +376,7 @@ void ChessBoard::changePlayer(){
 /* Returns true if start square contains king and end square contains rook of the player */
 bool ChessBoard::isCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd){
 
-    // source and destination must contain a king and rook (in either order)
+    // source and destination must contain a king and rook
     return((board[rankStart][fileStart]==chessPieces[player][0]&&
             board[rankEnd][fileEnd]==chessPieces[player][1]));          
 }
