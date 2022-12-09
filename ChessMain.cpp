@@ -373,25 +373,25 @@ int main() {
 
 	// white king and rook at A1 castling
 	// move accepted
-	chess.submitMove("E1", "A1");
+	chess.submitMove("E1", "C1");
 
 	// black king and rook at H8 castling
 	// move rejected since white bishop attacks F8
-	chess.submitMove("E8", "H8");
+	chess.submitMove("E8", "G8");
 
 	// filler move
 	chess.submitMove("C7", "C5");
 
 	// white king wanting to catle again
 	// move rejected
-	chess.submitMove("C1", "D1");
+	chess.submitMove("C1", "E1");
 
 	// filler move
 	chess.submitMove("D1", "D2");
 
 	// black king and rook at H8 castling when not blocked
 	// move approved
-	chess.submitMove("E8", "H8");
+	chess.submitMove("E8", "G8");
 
 	// filler moves
 	chess.submitMove("G1", "F3");
@@ -399,7 +399,7 @@ int main() {
 
 	// white king trying to do castling again
 	// move refused
-	chess.submitMove("C1", "H1");
+	chess.submitMove("C1", "E1");
 
 	chess.printBoard();
 	cout<<endl;

@@ -16,6 +16,7 @@ class ChessBoard{
       Piece* chessPieces[2][6]; // matrix of all the pieces needed in chess
       Piece* board[8][8]; // 8x8 chess board
       bool gameOver;
+      bool validCastling; // set to true if validCastlingMove returns true
 
       // matrix containing boolean on whether a piece has moved (used for castling)
       // row contains player: 0: white, 1: black
@@ -65,17 +66,15 @@ class ChessBoard{
       bool endOfGame();
 
       /* Returns true if the castling move is valid: 
+         - if source quare contains a king and destination is two squares away along the 
+           same rank AND 
          - if neither the king or rook involved have moved before AND
          - if there are no pieces between the king and the rook AND
          - if the king is not leaving, crossing over or ending up in a square that is 
            under attack from an opponent's piece 
-       * Parameters: rank and file of king (start square) and rook (end square) */
+       * Parameters: rank and file of king (start square) and destination square
+         which is two squares away along the same rank */
       bool validCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd);
-
-      /* Returns true if the starting square contains the player's king and the ending 
-         square contains a rook 
-       * Parameters: rank and file of king (start square) and rook (end square) */
-      bool isCastlingMove(int rankStart, int fileStart, int rankEnd, int fileEnd);
 
       /* Sets all the squares in the 8x8 board to null */
       void clearBoard();
@@ -94,9 +93,9 @@ class ChessBoard{
 
       /* Requests a move with a piece in source_square to destination_square 
        * In order to do castling, source square must contain the king and destination
-         square must contain a rook
+         square must be two squares along the same rank
        * If the inputs are correct, the player is valid, and the move is legal
-         it updates the board according to the move,checks if the move puts 
+         it updates the board according to the move, checks if the move puts 
          the other player in check/checkmate/stalemate and changes the player 
        * If the move results in checkmate/stalemate, 'gameOver' is set to true
        * Parameters: both squares are referred to with A-H for rank and 1-8 for file 
