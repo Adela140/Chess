@@ -371,6 +371,10 @@ int main() {
 	chess.submitMove("B7", "B6");
 	cout << '\n';
 
+	// white king trying to castle with rook when piece in between
+	// move rejected
+	chess.submitMove("E1", "G1");
+
 	// white king and rook at A1 castling
 	// move accepted
 	chess.submitMove("E1", "C1");
@@ -386,8 +390,18 @@ int main() {
 	// move rejected
 	chess.submitMove("C1", "E1");
 
-	// filler move
+	// filler moves
 	chess.submitMove("D1", "D2");
+	chess.submitMove("F6", "G4");
+	chess.submitMove("D3", "H7");
+
+	// black king and rook at H8 castling when bishop attacks G8
+	// move refused
+	chess.submitMove("E8", "G8");
+
+	// filler moves
+	chess.submitMove("C8", "B7");
+	chess.submitMove("H7", "G6");
 
 	// black king and rook at H8 castling when not blocked
 	// move approved

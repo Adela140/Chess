@@ -402,7 +402,7 @@ bool ChessBoard::validCastlingMove(int rankStart, int fileStart, int rankEnd, in
         for(int column=0; column<8; column++){
             // return false if an opponent's piece can legally move onto the squares 
             // which king leaves from, crosses over or ends up at
-            for(int file=fileStart; file!=fileStart+2*fileDirec; file=file+fileDirec){
+            for(int file=fileStart; file!=fileEnd+fileDirec; file=file+fileDirec){
                 if((board[row][column]!=NULL) && 
                     board[row][column]->pieceColour!=chessPieces[player][0]->pieceColour &&
                    (isDestinationLegal(row, column, rankStart, file)) &&
