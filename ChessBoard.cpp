@@ -11,7 +11,7 @@ using namespace std;
 #include "bishop.h"
 #include "pawn.h"
 
-/************************** Definitions for ChessBoard class ****************************/
+/********************** Definitions for ChessBoard class *********************/
 
 /* Constructs a ChessBoard with chess pieces set up on 8x8 board*/
 ChessBoard::ChessBoard(): player(white), gameOver(false){
@@ -122,8 +122,8 @@ bool ChessBoard::submitMove(const char source_square[], const char destination_s
     Piece* destination_piece = board[rankDestination][fileDestination];
     Piece* source_piece = board[rankSource][fileSource];
 
-    // check if the piece in source square can make the move legally and does not cause
-    // own king to be in check
+    // check if the piece in source square can make the move legally 
+    // and does not cause own king to be in check
     // OR check if a valid castling move
     if((validMoveNoCheck(rankSource, fileSource, rankDestination, fileDestination))|| 
         validCastlingMove(rankSource, fileSource, rankDestination, fileDestination)){

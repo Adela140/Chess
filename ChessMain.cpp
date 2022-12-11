@@ -12,7 +12,7 @@ using std::cout;
 
 int main() {
 
-/********************************* TESTING WRONG INPUTS *********************************/
+/**************************** TESTING WRONG INPUTS ***************************/
 	cout<<endl;
 	cout << "========================\n";
 	cout << "Testing inputs & player \n";
@@ -44,7 +44,7 @@ int main() {
 
 	cout<<endl;
 
-/**************************** TESTING THE CHESS PIECE CLASSES ***************************/
+/*********************** TESTING THE CHESS PIECE CLASSES *********************/
 
 	cout << "========================\n";
 	cout << "     Testing pieces     \n";
@@ -52,7 +52,7 @@ int main() {
 
 	chess.resetBoard();
 
-	/********************************** Testing Pawn ************************************/
+	/**************************** Testing Pawn ****************************/
 
 	// moving white pawn diagonally without eating another piece
 	// move refused
@@ -140,7 +140,7 @@ int main() {
 	// move approved
 	chess.submitMove("E2", "D3");
 
-	/******************************** Testing Bishop ************************************/
+	/**************************** Testing Bishop ****************************/
 	
 	// black bishop trying to move not diagonally
 	// move refused
@@ -186,7 +186,7 @@ int main() {
 	// move approved
 	chess.submitMove("G5", "F6");
 
-	/******************************** Testing Knight ************************************/
+	/**************************** Testing Knight ****************************/
 
 	// black knight jumping over pieces
 	// move approved
@@ -208,7 +208,7 @@ int main() {
 	// move refused
 	chess.submitMove("B1", "E3");
 
-	/********************************* Testing Rook *************************************/
+	/**************************** Testing Rook ****************************/
 
 	// making space
 	chess.submitMove("A2", "A4");
@@ -250,7 +250,7 @@ int main() {
 	// move approved
 	chess.submitMove("G6", "G2");
 
-	/********************************* Testing Queen ************************************/
+	/**************************** Testing Queen ****************************/
 
 	// white queen not moving diagonally or along a file or rank
 	// move refused
@@ -296,7 +296,7 @@ int main() {
 	// move approved
 	chess.submitMove("F7", "E7");
 
-	/********************************** Testing King ************************************/
+	/**************************** Testing King ****************************/
 	
 	// white king moving two places
 	// move refused
@@ -345,7 +345,7 @@ int main() {
 	chess.printBoard();
 	cout<<endl;
 
-/*********************************** TESTING CASTLING ***********************************/
+/****************************** TESTING CASTLING *****************************/
 	cout << "========================\n";
 	cout << "     Testing castling   \n";
 	cout << "========================\n\n";
@@ -418,7 +418,7 @@ int main() {
 	chess.printBoard();
 	cout<<endl;
 
-/************************************ STALEMATE TEST ************************************/
+/****************************** STALEMATE TEST *******************************/
 	cout << "========================\n";
 	cout << "    Testing stalemate   \n";
 	cout << "========================\n\n";
@@ -444,7 +444,7 @@ int main() {
 	chess.submitMove("C8", "E6");
 	cout<<endl;
 
-/************************************ CHECKMATE TEST ************************************/
+/******************************* CHECKMATE TEST ******************************/
 	cout << "========================\n";
 	cout << "    Testing checkmate   \n";
 	cout << "========================\n\n";
@@ -455,7 +455,7 @@ int main() {
 	chess.submitMove("D8", "H4");
 	cout<<endl;
 
-/************************************** EXTRA TEST **************************************/
+/******************************** EXTRA TEST *********************************/
 	cout << "========================\n";
 	cout << "     Game over tests    \n";
 	cout << "========================\n\n";
@@ -468,7 +468,8 @@ int main() {
 	chess.submitMove("A7", "A6");
 
 	cout<<endl;
-/************************************** FINAL TEST **************************************/
+	
+/******************************** FINAL TEST *********************************/
 
 	cout << "========================\n";
 	cout << "Testing the Chess Engine\n";

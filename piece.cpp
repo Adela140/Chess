@@ -5,7 +5,7 @@ using namespace std;
 
 #include "piece.h"
 
-/***************************** Definitions for Colour type ******************************/
+/************************ Definitions for Colour type ************************/
 
 /* Prints out the colour to either White or Black */
 std::ostream& operator <<(std::ostream& out, Colour _pieceColour){
@@ -26,7 +26,7 @@ Colour operator!(Colour _colour){
     return _colour;
 }
 
-/***************************** Definitions for Piece class ******************************/
+/************************ Definitions for Piece class ************************/
 
 /* Constructs Piece object */
 Piece::Piece(string _name, Colour _pieceColour): name(_name), pieceColour(_pieceColour){}

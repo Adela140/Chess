@@ -6,7 +6,7 @@ using namespace std;
 
 class ChessBoard;
 
-/***************************** Declarations for Colour type ******************************/
+/*********************** Declarations for Colour type ************************/
 enum Colour{white, black};
 
 /* Overriding the << operator for Colour
@@ -17,7 +17,7 @@ std::ostream& operator << (std::ostream& out, Colour _colour);
  * Changes colour to the opposite colour (from white to black and from black to white) */
 Colour operator!(Colour _colour);
 
-/***************************** Declarations for Piece class ******************************/
+/************************ Declarations for Piece class ***********************/
 
 class Piece {
     private:
@@ -26,12 +26,12 @@ class Piece {
         Colour pieceColour; // White or Black
 
         /* Pure virtual function 
-         * When implemented by the chess pieces (derived classes), it returns true if 
-           the move is legal according to the piece's rules 
-         * Parameters: integer indeces of rank and files of the source and destination, 
-           and pointer to a ChessBoard object */
-        virtual bool legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                                    const ChessBoard* const _cb) =0;
+         * When implemented by the chess pieces (derived classes), it returns 
+           true if the move is legal according to the piece's rules 
+         * Parameters: integer indeces of rank and files of the source and 
+           destination, and pointer to a ChessBoard object */
+        virtual bool legalPieceMove(int rankStart, int fileStart, int rankEnd, 
+                                    int fileEnd,const ChessBoard* const _cb) =0;
 
     friend class ChessBoard; 
     

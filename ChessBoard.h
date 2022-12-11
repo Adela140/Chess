@@ -3,7 +3,7 @@
 
 #include "piece.h"
 
-/************************** Declarations for ChessBoard class ***************************/
+/********************* Declarations for ChessBoard class *********************/
 
 /* ChessBoard provides an interface through which players can interact with 
    chess pieces in an 8x8 board */

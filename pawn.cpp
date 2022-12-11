@@ -6,7 +6,7 @@ using namespace std;
 #include "piece.h"
 #include "pawn.h"
 
-/**************************** Definitions for Pawn class ********************************/
+/************************ Definitions for Pawn class *************************/
 
 /* Constructs the Pawn object */
 Pawn::Pawn(Colour _pieceColour) : Piece("Pawn", _pieceColour){}
@@ -15,8 +15,8 @@ Pawn::Pawn(Colour _pieceColour) : Piece("Pawn", _pieceColour){}
 Pawn::~Pawn(){}
 
 /* Returns true if Pawn moving legally */
-bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd, 
-                          const ChessBoard* const _cb){
+bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, 
+                          int fileEnd, const ChessBoard* const _cb){
     int rankDirec;
     // if pawn is white, rank direction must be +1
     // if pawn is black, rank direction must be -1
@@ -24,8 +24,8 @@ bool Pawn::legalPieceMove(int rankStart, int fileStart, int rankEnd, int fileEnd
     else if(pieceColour==black){rankDirec=-1;}
     // if capturing another piece 
     if(_cb->get_piece(rankEnd,fileEnd)!=NULL){
-        // check if the move is one square diagonally in front of the source square
-        // if pawn is white destination rank must be larger by one
+        // check if the move is one square diagonally in front of the source 
+        // square if pawn is white destination rank must be larger by one
         // if black it must be smaller by one
         if(((rankEnd-rankStart==rankDirec) && (abs(fileEnd-fileStart)==1))){
             return true;
