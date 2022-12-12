@@ -2,13 +2,6 @@
 using std::cout;
 
 #include "ChessBoard.h"
-#include "piece.h"
-#include "king.h"
-#include "queen.h"
-#include "rook.h"
-#include "knight.h"
-#include "bishop.h"
-#include "pawn.h"
 
 int main() {
 
