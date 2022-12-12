@@ -3,7 +3,6 @@
 #include <string>
 using namespace std;
 
-#include "piece.h"
 #include "bishop.h"
 
 /*********************** Definitions for Bishop class ************************/

@@ -3,7 +3,6 @@
 #include <string>
 using namespace std;
 
-#include "piece.h"
 #include "knight.h"
 
 /*********************** Definitions for Knight class ************************/
