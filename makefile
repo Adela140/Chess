@@ -13,10 +13,10 @@ piece.o: piece.cpp piece.h
 bishop.o: bishop.cpp bishop.h piece.h ChessBoard.h
 	g++ -Wall -g -c bishop.cpp
 
-king.o: king.cpp king.h piece.h ChessBoard.h
+king.o: king.cpp king.h piece.h 
 	g++ -Wall -g -c king.cpp
 
-knight.o: knight.cpp knight.h piece.h ChessBoard.h
+knight.o: knight.cpp knight.h piece.h 
 	g++ -Wall -g -c knight.cpp
 
 pawn.o:pawn.cpp pawn.h piece.h ChessBoard.h
